@@ -51,7 +51,7 @@ Enemy_y_speed = 0
 # [PLAYERS]
 Player_x= 0
 Player_y= 268
-
+ 
 Player_x_speed = 0
 Player_y_speed = 0
 lives = 5
