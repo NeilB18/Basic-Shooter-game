@@ -54,8 +54,7 @@ while running:
     tile_dict = {0:pygame.image.load('concrete.png'),1: pygame.image.load("tile.png")}
 
 
-#ghgh
-# drawing image
+
     for row in map:
         for x in row:
             if x == 0:
@@ -105,7 +104,10 @@ while running:
     if Player_x <=0:
         Player_x = 0
 
-#hjhjhj
     draw(player, Player_x, Player_y)
     pygame.display.update()
     clock.tick(60)
+
+lives = 5
+clock = 0
+#Draw
