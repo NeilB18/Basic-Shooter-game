@@ -1,4 +1,5 @@
 import pygame
+from pygame import *
 pygame.init()
 
 # <---SCREEN--->
@@ -41,7 +42,7 @@ Player_y= 268
 Player_x_speed = 0
 Player_y_speed = 0
 lives = 5
-clock = 0 
+timer = 0 
 
 # [FONTS]
 font = pygame.font.Font('freesansbold.ttf',32)
@@ -52,7 +53,10 @@ def draw(name,x,y):
     screen.blit(name,(x,y))
 
 #Draw Text
-lives_label = font.render(f"Lives: {lives}")
+lives_label = font.render(f"Lives: {lives}",1,(225,225,225))
+timer_label = font.render(f"Clock {timer}", 1,(225,225,225))
+draw(lives_label,10,10)
+draw(timer_label,10,20)
 
 running = True
 while running:
