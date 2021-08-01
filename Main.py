@@ -1,3 +1,5 @@
+import random
+from random import randint
 import pygame
 from pygame import *
 pygame.init()
@@ -11,6 +13,9 @@ start_ticks=pygame.time.get_ticks()
 
 # <---IMAGES-->
 player = pygame.image.load('target-shooter.png')
+enemy1 = pygame.image.load('shooter.png')
+enemy2 = pygame.image.load('shooter.png')
+enemy3 = pygame.image.load('shooter.png')
 
 clock = pygame.time.Clock()
 
@@ -33,6 +38,11 @@ map = [
     [0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,1 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0],
     [0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,1 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0] 
 ]
+
+
+# Enemy Stuff
+Enemy_x = random.randint(1000,1010)
+Enemy_y = random.randint(40,536)
 
 
 # <---CONTROLS--->
