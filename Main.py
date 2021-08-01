@@ -6,6 +6,8 @@ pygame.init()
 screen = pygame.display.set_mode((1000,600))
 pygame.display.set_caption('Shooter')
 
+# <--_TIME-->
+start_ticks=pygame.time.get_ticks()
 
 # <---IMAGES-->
 player = pygame.image.load('target-shooter.png')
@@ -45,18 +47,24 @@ lives = 5
 timer = 0 
 
 # [FONTS]
-font = pygame.font.Font('freesansbold.ttf',32)
+font = pygame.font.Font('freesansbold.ttf',22)
 
 # <---FUNCTIONS--->
 
 def draw(name,x,y):
     screen.blit(name,(x,y))
 
+def show_time():
+    global seconds
+    seconds = int((pygame.time.get_ticks()-start_ticks)/1000)    
+    timer_label = font.render(f"Time: {seconds}", True ,(0,0,0))
+    draw(timer_label,890,10)
+
 #Draw Text
 lives_label = font.render(f"Lives: {lives}",1,(225,225,225))
-timer_label = font.render(f"Clock {timer}", 1,(225,225,225))
-draw(lives_label,10,10)
-draw(timer_label,10,20)
+
+
+
 
 running = True
 while running:
@@ -115,7 +123,8 @@ while running:
         Player_x = 936
     if Player_x <=0:
         Player_x = 0
-
+    
+    show_time()
     draw(player, Player_x, Player_y)
     pygame.display.update()
     clock.tick(60)
