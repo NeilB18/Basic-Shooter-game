@@ -105,7 +105,7 @@ while running:
     if Player_x <=0:
         Player_x = 0
 
-
+#hjhjhj
     draw(player, Player_x, Player_y)
     pygame.display.update()
     clock.tick(60)
