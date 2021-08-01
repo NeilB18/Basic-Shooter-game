@@ -62,8 +62,7 @@ def show_time():
     draw(timer_label,890,10)
 
 #Draw Text
-lives_label = font.render(f"Lives: {lives}",1,(225,225,225))
-
+lives_label = font.render(f"Lives: {str(lives)}",1,(0,0,0))
 
 
 
