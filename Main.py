@@ -3,6 +3,7 @@ pygame.init()
 
 screen = pygame.display.set_mode((1000,600))
 
+
 # <---IMAGES-->
 player = pygame.image.load('target-shooter.png')
 
@@ -37,6 +38,8 @@ Player_y= 268
 
 Player_x_speed = 0
 Player_y_speed = 0
+lives = 5
+clock = 0 
 
 # [FONTS]
 font = pygame.font.Font('freesansbold.ttf',32)
@@ -45,6 +48,9 @@ font = pygame.font.Font('freesansbold.ttf',32)
 
 def draw(name,x,y):
     screen.blit(name,(x,y))
+
+#Draw Text
+lives_label = font.render(f"Lives: {lives}")
 
 running = True
 while running:
@@ -55,6 +61,7 @@ while running:
 
 
 
+# drawing image
     for row in map:
         for x in row:
             if x == 0:
@@ -108,6 +115,4 @@ while running:
     pygame.display.update()
     clock.tick(60)
 
-lives = 5
-clock = 0
-#Draw
+   
