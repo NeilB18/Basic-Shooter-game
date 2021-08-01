@@ -1,6 +1,6 @@
-import random
 from random import randint as rt
 import pygame
+from math import *
 from pygame import *
 pygame.init()
 
