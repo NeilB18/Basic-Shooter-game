@@ -130,7 +130,7 @@ while running:
         Player_x = 0
     
     show_time()
-    draw(lives_label,10,10)
+    draw(lives_label,890,40)
     draw(player, Player_x, Player_y)
     pygame.display.update()
     clock.tick(60)
