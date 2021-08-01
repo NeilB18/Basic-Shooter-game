@@ -13,9 +13,8 @@ start_ticks=pygame.time.get_ticks()
 
 # <---IMAGES-->
 player = pygame.image.load('target-shooter.png')
-enemy1 = pygame.image.load('shooter.png')
-enemy2 = pygame.image.load('shooter.png')
-enemy3 = pygame.image.load('shooter.png')
+number_of_enemies = 3
+
 
 clock = pygame.time.Clock()
 
@@ -57,6 +56,21 @@ Player_x_speed = 0
 Player_y_speed = 0
 lives = 5
 timer = 0 
+
+# [ENEMIES]
+ENEMY = []
+ENEMY_X = []
+ENEMY_Y = []
+ENEMY_SPEED = []
+
+for x in range(number_of_enemies):
+    ENEMY.append(pygame.image.load("shooter.png"))
+    ENEMY_X.append(Enemy_x)
+    ENEMY_Y.append(Enemy_y)
+    ENEMY_SPEED.append(-5)
+
+
+
 
 # [FONTS]
 font = pygame.font.Font('freesansbold.ttf',22)
@@ -141,12 +155,23 @@ while running:
     if Player_x <=0:
         Player_x = 0
     
+    for i in range(number_of_enemies):
+        ENEMY_X[i]+=ENEMY_SPEED[i]
+
+        if ENEMY_X[i]<=600:
+            ENEMY_X[i] = rt(1000,1010)
+            ENEMY_Y[i] = rt(40,536)
+
+        draw(ENEMY[i],ENEMY_X[i],ENEMY_Y[i])
+
+
+
+
+
     show_time()
     draw(lives_label,890,40)
     draw(player, Player_x, Player_y)
-    draw(enemy1,Enemy_x,Enemy_y)
-    draw(enemy2,Enemy_x,Enemy_y)
-    draw(enemy3,900,125)
+
     pygame.display.update()
     clock.tick(60)
 
