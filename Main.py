@@ -1,7 +1,9 @@
 import pygame
 pygame.init()
 
+# <---SCREEN--->
 screen = pygame.display.set_mode((1000,600))
+pygame.display.set_caption('Shooter')
 
 
 # <---IMAGES-->
@@ -60,8 +62,7 @@ while running:
     tile_dict = {0:pygame.image.load('concrete.png'),1: pygame.image.load("tile.png")}
 
 
-
-# drawing image
+    # drawing image
     for row in map:
         for x in row:
             if x == 0:
@@ -103,11 +104,11 @@ while running:
     
 
     if Player_y>=536:
-        Player_y  = 536
-    if Player_y <=64:
-        Player_y = 64
-    if Player_x>=836:
-        Player_x = 836
+        Player_y = 536
+    if Player_y <0:
+        Player_y = 0
+    if Player_x>=936:
+        Player_x = 936
     if Player_x <=0:
         Player_x = 0
 
