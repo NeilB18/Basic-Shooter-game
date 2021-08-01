@@ -54,7 +54,7 @@ while running:
     tile_dict = {0:pygame.image.load('concrete.png'),1: pygame.image.load("tile.png")}
 
 
-
+#ghgh
 # drawing image
     for row in map:
         for x in row:
