@@ -62,8 +62,7 @@ def show_time():
     draw(timer_label,890,10)
 
 #Draw Text
-lives_label = font.render(f"Lives: {lives}",1,(225,225,225))
-
+lives_label = font.render(f"Lives: {str(lives)}",1,(0,0,0))
 
 
 
@@ -131,7 +130,7 @@ while running:
         Player_x = 0
     
     show_time()
-    draw(lives_label,10,10)
+    draw(lives_label,890,40)
     draw(player, Player_x, Player_y)
     pygame.display.update()
     clock.tick(60)
