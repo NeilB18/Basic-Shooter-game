@@ -74,8 +74,8 @@ while running:
     tile_dict = {0:pygame.image.load('concrete.png'),1: pygame.image.load("tile.png")}
 
     #Draw Text
-    lives_label = font.render(f"Lives: {lives}",True,(225,225,225))
-    draw(lives_label,10,10)
+    lives_label = font.render(f"Lives: {str(lives)}",True,(0,0,0))
+    
    
 
 
@@ -130,6 +130,7 @@ while running:
         Player_x = 0
     
     show_time()
+    draw(lives_label,10,10)
     draw(player, Player_x, Player_y)
     pygame.display.update()
     clock.tick(60)
