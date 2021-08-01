@@ -1,2 +1,2 @@
 # Ronin-and-Neil-Shooter-Game
-Shooter game made in pygame
+Shooter game made in pygame by Ronin and Neil
