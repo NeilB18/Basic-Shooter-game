@@ -44,6 +44,8 @@ map = [
 Enemy_x = rt(1000,1010)
 Enemy_y = rt(40,536)
 
+Enemy_x_speed = -2
+Enemy_y_speed = 0
 
 # <---CONTROLS--->
 
@@ -142,7 +144,9 @@ while running:
     show_time()
     draw(lives_label,890,40)
     draw(player, Player_x, Player_y)
+    draw(enemy1,Enemy_x,Enemy_y)
+    draw(enemy2,Enemy_x,Enemy_y)
+    draw(enemy3,900,125)
     pygame.display.update()
     clock.tick(60)
 
-   
