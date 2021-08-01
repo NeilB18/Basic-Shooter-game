@@ -52,11 +52,7 @@ font = pygame.font.Font('freesansbold.ttf',32)
 def draw(name,x,y):
     screen.blit(name,(x,y))
 
-#Draw Text
-lives_label = font.render(f"Lives: {lives}",1,(225,225,225))
-timer_label = font.render(f"Clock {timer}", 1,(225,225,225))
-draw(lives_label,10,10)
-draw(timer_label,10,20)
+
 
 running = True
 while running:
@@ -64,6 +60,12 @@ while running:
     tileX = 0
     tileY = 0
     tile_dict = {0:pygame.image.load('concrete.png'),1: pygame.image.load("tile.png")}
+
+    #Draw Text
+    lives_label = font.render(f"Lives: {lives}",1,(225,225,225))
+    timer_label = font.render(f"Clock {timer}", 1,(225,225,225))
+    draw(lives_label,10,10)
+    draw(timer_label,10,20)
 
 
     # drawing image
