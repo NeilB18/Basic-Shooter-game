@@ -1,5 +1,5 @@
 import random
-from random import randint
+from random import randint as rt
 import pygame
 from pygame import *
 pygame.init()
@@ -41,8 +41,8 @@ map = [
 
 
 # Enemy Stuff
-Enemy_x = random.randint(1000,1010)
-Enemy_y = random.randint(40,536)
+Enemy_x = rt(1000,1010)
+Enemy_y = rt(40,536)
 
 
 # <---CONTROLS--->
