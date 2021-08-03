@@ -167,6 +167,8 @@ while running:
         if ENEMY_X[i]<=600:
             ENEMY_X[i] = rt(1000,1010)
             ENEMY_Y[i] = rt(40,536)
+        
+
 
         draw(ENEMY[i],ENEMY_X[i],ENEMY_Y[i])
 
