@@ -92,7 +92,7 @@ def check_collision(x1,y1,x2,y2):
         return True
     else: 
         return False
-        
+
 #Draw Text
 lives_label = font.render(f"Lives: {str(lives)}",1,(0,0,0))
 
@@ -136,13 +136,13 @@ while running:
 
 
             if event.key == pygame.K_w:
-                Player_y_speed=-5
+                Player_y_speed=-10
             if event.key == pygame.K_a:
-                Player_x_speed =-5
+                Player_x_speed =-10
             if event.key == pygame.K_s:
-                Player_y_speed = 5
+                Player_y_speed = 10
             if event.key == pygame.K_d:
-                Player_x_speed = 5
+                Player_x_speed = 10
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_w or event.key == pygame.K_a or event.key == pygame.K_s or event.key == pygame.K_d:
                 Player_x_speed = 0
