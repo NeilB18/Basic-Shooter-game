@@ -82,11 +82,17 @@ def draw(name,x,y):
 
 
 def show_time():
-    global seconds
     seconds = int((pygame.time.get_ticks()-start_ticks)/1000)    
     timer_label = font.render(f"Time: {seconds}", True ,(0,0,0))
     draw(timer_label,890,10)
 
+def check_collision(x1,y1,x2,y2):
+    d = sqrt((pow(x2-x1 ,2))+(pow(y2-y1,2)))
+    if d < 27:
+        return True
+    else: 
+        return False
+        
 #Draw Text
 lives_label = font.render(f"Lives: {str(lives)}",1,(0,0,0))
 
