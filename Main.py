@@ -82,10 +82,16 @@ def draw(name,x,y):
 
 
 def show_time():
-    global seconds
     seconds = int((pygame.time.get_ticks()-start_ticks)/1000)    
     timer_label = font.render(f"Time: {seconds}", True ,(0,0,0))
     draw(timer_label,890,10)
+
+def check_collision(x1,y1,x2,y2):
+    d = sqrt((pow(x2-x1 ,2))+(pow(y2-y1,2)))
+    if d < 27:
+        return True
+    else: 
+        return False
 
 #Draw Text
 lives_label = font.render(f"Lives: {str(lives)}",1,(0,0,0))
@@ -135,13 +141,13 @@ while running:
 
 
             if event.key == pygame.K_w:
-                Player_y_speed=-5
+                Player_y_speed=-10
             if event.key == pygame.K_a:
-                Player_x_speed =-5
+                Player_x_speed =-10
             if event.key == pygame.K_s:
-                Player_y_speed = 5
+                Player_y_speed = 10
             if event.key == pygame.K_d:
-                Player_x_speed = 5
+                Player_x_speed = 10
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_w or event.key == pygame.K_a or event.key == pygame.K_s or event.key == pygame.K_d:
                 Player_x_speed = 0
@@ -173,6 +179,8 @@ while running:
         if ENEMY_X[i]<=600:
             ENEMY_X[i] = rt(1000,1010)
             ENEMY_Y[i] = rt(40,536)
+        
+
 
         draw(ENEMY[i],ENEMY_X[i],ENEMY_Y[i])
 
