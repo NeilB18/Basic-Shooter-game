@@ -136,13 +136,13 @@ while running:
 
 
             if event.key == pygame.K_w:
-                Player_y_speed=-15
+                Player_y_speed=-5
             if event.key == pygame.K_a:
-                Player_x_speed =-15
+                Player_x_speed =-5
             if event.key == pygame.K_s:
-                Player_y_speed = 15
+                Player_y_speed = 5
             if event.key == pygame.K_d:
-                Player_x_speed = 15
+                Player_x_speed = 5
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_w or event.key == pygame.K_a or event.key == pygame.K_s or event.key == pygame.K_d:
                 Player_x_speed = 0
