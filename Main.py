@@ -90,7 +90,12 @@ def show_time():
 #Draw Text
 lives_label = font.render(f"Lives: {str(lives)}",1,(0,0,0))
 
-
+# Check for Collisions
+def checkCollisions(x_pos, y_pos):
+    print(x_pos,y_pos)
+    if x_pos <= 160 and x_pos >= 120:
+        return True
+    return (x_pos >= 936) or (x_pos < 0) or (y_pos < 0) or ( y_pos >= 536)
 
 running = True
 while running:
@@ -102,11 +107,12 @@ while running:
     #Draw Text
     lives_label = font.render(f"Lives: {str(lives)}",True,(0,0,0))
     
+    
     # drawing image
     for row in map:
         for x in row:
             if x == 0:
-                draw(tile_dict[0],tileX,tileY)
+                draw(tile_dict[0],tileX, tileY)
                 tileX += 40
             if x == 1:
                 draw(tile_dict[1],tileX,tileY)
@@ -114,10 +120,9 @@ while running:
             if x == 2:
                 draw(tile_dict[2],tileX,tileY)
                 tileX += 40
+
         tileX = 0
         tileY += 40            
-
-
 
 
     for event in pygame.event.get():
@@ -144,16 +149,23 @@ while running:
 
     Player_y+=Player_y_speed
     Player_x+=Player_x_speed
-    
 
-    if Player_y>=536:
-        Player_y = 536
-    if Player_y <0:
-        Player_y = 0
-    if Player_x>=936:
-        Player_x = 936
-    if Player_x <=0:
-        Player_x = 0
+    if (checkCollisions(Player_x, Player_y)):
+        Player_y= Player_y - Player_y_speed
+        Player_x= Player_x - Player_x_speed
+        Player_x_speed = 0
+        Player_y_speed = 0
+
+    
+    
+    # if Player_y>=536:
+    #     Player_y = 536
+    # if Player_y <0:
+    #     Player_y = 0
+    # if Player_x>=936:
+    #     Player_x = 936
+    # if Player_x <=0:
+    #     Player_x = 0
     
     for i in range(number_of_enemies):
         ENEMY_X[i]+=ENEMY_SPEED[i]
