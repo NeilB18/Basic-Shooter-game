@@ -150,7 +150,9 @@ while running:
 
     Player_y+=Player_y_speed
     Player_x+=Player_x_speed
-    
+    if Player_x in range(40,120+1) and Player_y in range(0,200+1):
+        Player_x = 12
+        Player_y = 12
 
     if Player_y>=536:
         Player_y = 536
@@ -171,9 +173,6 @@ while running:
 
 
         draw(ENEMY[i],ENEMY_X[i],ENEMY_Y[i])
-
-
-
 
 
     show_time()
