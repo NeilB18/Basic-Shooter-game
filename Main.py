@@ -113,12 +113,12 @@ def checkCollisions(x_pos, y_pos):
     string_x_pos = str(x_pos)
     string_y_pos = str(y_pos)
     cords = font.render(f"{x_pos, y_pos}",1,(0,0,0))
-    draw(cords,890,80)
+    draw(cords,890,70)
     if x_pos <= 160  and x_pos >= 40 and y_pos >= 378:
         return True
-    if x_pos <= 160 and x_pos >= 40 and y_pos <= 236:
+    if x_pos <= 160 and x_pos >= 40 and y_pos <= 238:
         return True
-    if x_pos >= 210 and x_pos <= 360 and y_pos >= 98 and y_pos <= 398:
+    if x_pos >= 210 and x_pos <= 360 and y_pos >= 98 and y_pos <= 399:
         return True
     return (x_pos >= 936) or (x_pos < 0) or (y_pos < 0) or ( y_pos >= 536)
 
@@ -186,14 +186,11 @@ while running:
 
     Player_y+=Player_y_speed
     Player_x+=Player_x_speed
-    # if Player_x in range(40,120+1):
-    #     Player_x = 40
-    # elif Player_y in range(0,200+1):
-    #     Player_y = 200
 
-    if (checkCollisions(Player_x, Player_y)):
-        Player_y= Player_y - Player_y_speed
-        Player_x= Player_x - Player_x_speed
+
+    if checkCollisions(Player_x, Player_y):
+        Player_y -= Player_y_speed
+        Player_x -= Player_x_speed
         Player_x_speed = 0
         Player_y_speed = 0
 
@@ -221,6 +218,11 @@ while running:
         if ENEMY_X[i]<=600:
             ENEMY_X[i] = rt(1000,1010)
             ENEMY_Y[i] = rt(40,536)
+        
+        if check_collision(Bullet_X,Bullet_Y,ENEMY_X[i],ENEMY_Y[i]):
+            
+            ENEMY_X[i] = rt(1000,1010)
+            ENEMY_Y[i] = rt(40,536)            
         
 
 
