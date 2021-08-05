@@ -110,8 +110,15 @@ lives_label = font.render(f"Lives: {str(lives)}",1,(0,0,0))
 
 # Check for Collisions
 def checkCollisions(x_pos, y_pos):
-    print(x_pos,y_pos)
-    if x_pos <= 160 and x_pos >= 120:
+    string_x_pos = str(x_pos)
+    string_y_pos = str(y_pos)
+    cords = font.render(f"{x_pos, y_pos}",1,(0,0,0))
+    draw(cords,890,80)
+    if x_pos <= 160  and x_pos >= 40 and y_pos >= 378:
+        return True
+    if x_pos <= 160 and x_pos >= 40 and y_pos <= 236:
+        return True
+    if x_pos >= 210 and x_pos <= 360 and y_pos >= 98 and y_pos <= 398:
         return True
     return (x_pos >= 936) or (x_pos < 0) or (y_pos < 0) or ( y_pos >= 536)
 
