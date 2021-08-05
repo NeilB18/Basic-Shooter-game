@@ -13,6 +13,7 @@ start_ticks=pygame.time.get_ticks()
 
 # <---IMAGES-->
 player = pygame.image.load('target-shooter.png')
+Bullet_Player = pygame.image.load('001-bullet.png')
 number_of_enemies = 3
 
 
@@ -51,7 +52,6 @@ Enemy_y_speed = 0
 # [PLAYERS]
 Player_x= 0
 Player_y= 268
- 
 Player_x_speed = 0
 Player_y_speed = 0
 lives = 5
@@ -63,6 +63,7 @@ ENEMY_X = []
 ENEMY_Y = []
 ENEMY_SPEED = []
 
+
 for x in range(number_of_enemies):
     ENEMY.append(pygame.image.load("shooter.png"))
     ENEMY_X.append(Enemy_x)
@@ -70,6 +71,12 @@ for x in range(number_of_enemies):
     ENEMY_SPEED.append(-5)
 
 
+# [BULLET][PLAYER]
+Bullet_X_speed = 70
+Bullet_X = Player_x
+Bullet_Y = Player_y
+bullet_state = "Ready"
+# [BULLET][ENEMY]
 
 
 # [FONTS]
@@ -92,6 +99,11 @@ def check_collision(x1,y1,x2,y2):
         return True
     else: 
         return False
+
+def fire_bullet_P1(x,y):
+    global bullet_state
+    bullet_state = "Fire"    
+    draw(Bullet_Player,x+16,y+10)
 
 #Draw Text
 lives_label = font.render(f"Lives: {str(lives)}",1,(0,0,0))
@@ -142,39 +154,59 @@ while running:
 
             if event.key == pygame.K_w:
                 Player_y_speed=-10
+                
             if event.key == pygame.K_a:
                 Player_x_speed =-10
+
+
             if event.key == pygame.K_s:
                 Player_y_speed = 10
+                
             if event.key == pygame.K_d:
                 Player_x_speed = 10
+
+            if event.key == pygame.K_SPACE:
+                if bullet_state == "Ready" :
+                    Bullet_X = Player_x
+                    Bullet_Y = Player_y
+                    fire_bullet_P1(Bullet_X,Bullet_Y)            
+
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_w or event.key == pygame.K_a or event.key == pygame.K_s or event.key == pygame.K_d:
                 Player_x_speed = 0
                 Player_y_speed = 0
 
+
     Player_y+=Player_y_speed
     Player_x+=Player_x_speed
-    if Player_x in range(40,120+1) and Player_y in range(0,200+1):
-        Player_x = 12
-        Player_y = 12
+    # if Player_x in range(40,120+1):
+    #     Player_x = 40
+    # elif Player_y in range(0,200+1):
+    #     Player_y = 200
 
-    if (checkCollisions(Player_x, Player_y)):
-        Player_y= Player_y - Player_y_speed
-        Player_x= Player_x - Player_x_speed
-        Player_x_speed = 0
-        Player_y_speed = 0
+    # if (checkCollisions(Player_x, Player_y)):
+    #     Player_y= Player_y - Player_y_speed
+    #     Player_x= Player_x - Player_x_speed
+    #     Player_x_speed = 0
+    #     Player_y_speed = 0
 
+    if bullet_state == "Fire":
+        fire_bullet_P1(Bullet_X,Bullet_Y)
+        Bullet_X+=Bullet_X_speed
+        bullet_FLIP = False
+        
+    if Bullet_X>=900:
+        bullet_state = "Ready"
+        Bullet_x = Player_x
     
-    
-    # if Player_y>=536:
-    #     Player_y = 536
-    # if Player_y <0:
-    #     Player_y = 0
-    # if Player_x>=936:
-    #     Player_x = 936
-    # if Player_x <=0:
-    #     Player_x = 0
+    if Player_y>=536:
+        Player_y = 536
+    if Player_y <0:
+        Player_y = 0
+    if Player_x>=936:
+        Player_x = 936
+    if Player_x <=0:
+        Player_x = 0
     
     for i in range(number_of_enemies):
         ENEMY_X[i]+=ENEMY_SPEED[i]
@@ -194,4 +226,3 @@ while running:
 
     pygame.display.update()
     clock.tick(60)
-
