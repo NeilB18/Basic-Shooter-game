@@ -191,11 +191,11 @@ while running:
     # elif Player_y in range(0,200+1):
     #     Player_y = 200
 
-    # if (checkCollisions(Player_x, Player_y)):
-    #     Player_y= Player_y - Player_y_speed
-    #     Player_x= Player_x - Player_x_speed
-    #     Player_x_speed = 0
-    #     Player_y_speed = 0
+    if (checkCollisions(Player_x, Player_y)):
+        Player_y= Player_y - Player_y_speed
+        Player_x= Player_x - Player_x_speed
+        Player_x_speed = 0
+        Player_y_speed = 0
 
     if bullet_state == "Fire":
         fire_bullet_P1(Bullet_X,Bullet_Y)
