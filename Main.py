@@ -104,7 +104,7 @@ def show_time():
 
 def check_collision(x1,y1,x2,y2):
     d = sqrt((pow(x2-x1 ,2))+(pow(y2-y1,2)))
-    if d < 27:
+    if d < 37:
         return True
     else: 
         return False
@@ -193,6 +193,12 @@ while running:
             if event.key == pygame.K_w or event.key == pygame.K_a or event.key == pygame.K_s or event.key == pygame.K_d:
                 Player_x_speed = 0
                 Player_y_speed = 0
+        
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if bullet_state == "Ready" :
+                Bullet_X = Player_x
+                Bullet_Y = Player_y
+                fire_bullet_P1(Bullet_X,Bullet_Y) 
 
 
     Player_y+=Player_y_speed
@@ -210,7 +216,7 @@ while running:
         Bullet_X+=Bullet_X_speed
         bullet_FLIP = False
         
-    if Bullet_X>=900:
+    if Bullet_X>=1000:
         bullet_state = "Ready"
         Bullet_x = Player_x
     
@@ -234,9 +240,7 @@ while running:
             ENEMY_STATE = "STOP"
        
        
-        if check_collision(Bullet_X,Bullet_Y,ENEMY_X[i],ENEMY_Y[i]) and level == 1:
-
-            ENEMY_X[i] = 2000
+        if check_collision(Bullet_X,Bullet_Y,ENEMY_X[i],ENEMY_Y[i]) :  
             ENEMY_Y[i] = 2000
             level+=1
 
