@@ -19,6 +19,9 @@ number_of_enemies = 3
 
 clock = pygame.time.Clock()
 
+# <---LEVEL-->
+level = 1
+
 # <---MAP--->
 
 map = [
@@ -63,6 +66,10 @@ ENEMY_X = []
 ENEMY_Y = []
 ENEMY_SPEED = []
 
+ENEMY_STATE = "MOVING"
+
+ENEMY_STOP_POS_X = rt(800,900)
+ENEMY_STOP_POS_Y = rt(0,536)
 
 for x in range(number_of_enemies):
     ENEMY.append(pygame.image.load("shooter.png"))
@@ -78,6 +85,8 @@ Bullet_Y = Player_y
 bullet_state = "Ready"
 # [BULLET][ENEMY]
 
+# [SCORE]
+score = 0
 
 # [FONTS]
 font = pygame.font.Font('freesansbold.ttf',22)
@@ -105,6 +114,8 @@ def fire_bullet_P1(x,y):
     bullet_state = "Fire"    
     draw(Bullet_Player,x+16,y+10)
 
+
+
 #Draw Text
 lives_label = font.render(f"Lives: {str(lives)}",1,(0,0,0))
 
@@ -124,7 +135,7 @@ def checkCollisions(x_pos, y_pos):
 
 running = True
 while running:
-
+    
     tileX = 0
     tileY = 0
     tile_dict = {0:pygame.image.load('concrete.png'),1: pygame.image.load("tile.png"),2:pygame.image.load('line.png')}
@@ -214,15 +225,24 @@ while running:
     
     for i in range(number_of_enemies):
         ENEMY_X[i]+=ENEMY_SPEED[i]
-
+       
         if ENEMY_X[i]<=600:
             ENEMY_X[i] = rt(1000,1010)
             ENEMY_Y[i] = rt(40,536)
         
-        if check_collision(Bullet_X,Bullet_Y,ENEMY_X[i],ENEMY_Y[i]):
-            
-            ENEMY_X[i] = rt(1000,1010)
-            ENEMY_Y[i] = rt(40,536)            
+        if ENEMY_X[i] == ENEMY_STOP_POS_X :
+            ENEMY_STATE = "STOP"
+       
+       
+        if check_collision(Bullet_X,Bullet_Y,ENEMY_X[i],ENEMY_Y[i]) and level == 1:
+
+            ENEMY_X[i] = 2000
+            ENEMY_Y[i] = 2000
+            level+=1
+
+        if ENEMY_STATE == "STOP":
+            ENEMY_X[i] = ENEMY_STOP_POS_X
+       
         
 
 
@@ -232,6 +252,8 @@ while running:
     show_time()
     draw(lives_label,890,40)
     draw(player, Player_x, Player_y)
-
+    
     pygame.display.update()
     clock.tick(60)
+
+    
