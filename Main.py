@@ -12,7 +12,7 @@ pygame.display.set_caption('Shooter')
 start_ticks=pygame.time.get_ticks()
 
 # <---IMAGES-->
-player = pygame.image.load('target-shooter.png')
+player = pygame.image.load('player.png')
 Bullet_Player = pygame.image.load('001-bullet.png')
 number_of_enemies = 3
 
@@ -114,6 +114,14 @@ def fire_bullet_P1(x,y):
     bullet_state = "Fire"    
     draw(Bullet_Player,x+16,y+10)
 
+def find_prime():
+    num = rt(-10,100)
+    for x in range(-2,100):
+        if num%x==0:
+            return False
+    else:
+        return True
+    
 
 
 #Draw Text
@@ -239,17 +247,14 @@ while running:
         if ENEMY_X[i] == ENEMY_STOP_POS_X :
             ENEMY_STATE = "STOP"
        
-       
         if check_collision(Bullet_X,Bullet_Y,ENEMY_X[i],ENEMY_Y[i]) :  
             ENEMY_Y[i] = 2000
             level+=1
-
+        if find_prime():
+            print("shoot")
         if ENEMY_STATE == "STOP":
             ENEMY_X[i] = ENEMY_STOP_POS_X
        
-        
-
-
         draw(ENEMY[i],ENEMY_X[i],ENEMY_Y[i])
 
 
@@ -259,5 +264,3 @@ while running:
     
     pygame.display.update()
     clock.tick(60)
-
-    
