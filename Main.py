@@ -115,8 +115,8 @@ def fire_bullet_P1(x,y):
     draw(Bullet_Player,x+16,y+10)
 
 def find_prime():
-    num = rt(-10,100)
-    for x in range(-2,100):
+    num = rt(10,100)
+    for x in range(2,10):
         if num%x==0:
             return False
     else:
