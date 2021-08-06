@@ -4,6 +4,9 @@ from math import *
 from pygame import *
 pygame.init()
 
+
+i = 0
+
 # <---SCREEN--->
 screen = pygame.display.set_mode((1000,600))
 pygame.display.set_caption('Shooter')
@@ -21,7 +24,7 @@ clock = pygame.time.Clock()
 
 # <---MAP--->
 
-map = [
+map1 = [
     [0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
     [0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
     [0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
@@ -38,6 +41,30 @@ map = [
     [0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0],
     [0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0] 
 ]
+
+
+
+# <----Level2 Map---->
+
+map2 = [
+    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0],
+    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0],
+    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0],
+    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0]     
+]
+
+
 
 
 # Enemy Stuff
@@ -109,7 +136,7 @@ def fire_bullet_P1(x,y):
 lives_label = font.render(f"Lives: {str(lives)}",1,(0,0,0))
 
 # Check for Collisions
-def checkCollisions(x_pos, y_pos):
+def checkCollisions1(x_pos, y_pos):
     string_x_pos = str(x_pos)
     string_y_pos = str(y_pos)
     cords = font.render(f"{x_pos, y_pos}",1,(0,0,0))
@@ -120,7 +147,10 @@ def checkCollisions(x_pos, y_pos):
         return True
     if x_pos >= 210 and x_pos <= 360 and y_pos >= 98 and y_pos <= 398:
         return True
+    if x_pos >= 510:
+        return True
     return (x_pos >= 936) or (x_pos < 0) or (y_pos < 0) or ( y_pos >= 536)
+    
 
 running = True
 while running:
@@ -134,21 +164,34 @@ while running:
     
     
     # drawing image
-    for row in map:
+    #for row in map1:
+    #    for x in row:
+    #        if x == 0:
+    #            draw(tile_dict[0],tileX, tileY)
+    #            tileX += 40
+    #        if x == 1:
+    #            draw(tile_dict[1],tileX,tileY)
+    #            tileX += 40
+    #        if x == 2:
+    #            draw(tile_dict[2],tileX,tileY)
+    #            tileX += 40#
+    #    tileX = 0
+    #    tileY += 40 
+
+    #Draw map2
+    for row in map2:
         for x in row:
-            if x == 0:
+            if x==0:
                 draw(tile_dict[0],tileX, tileY)
                 tileX += 40
             if x == 1:
                 draw(tile_dict[1],tileX,tileY)
                 tileX += 40
-            if x == 2:
-                draw(tile_dict[2],tileX,tileY)
+            if x==2:
+                draw(tile_dct[2],tileX,tileY)
                 tileX += 40
-
         tileX = 0
-        tileY += 40            
-
+        tileY += 40
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -186,12 +229,9 @@ while running:
 
     Player_y+=Player_y_speed
     Player_x+=Player_x_speed
-    # if Player_x in range(40,120+1):
-    #     Player_x = 40
-    # elif Player_y in range(0,200+1):
-    #     Player_y = 200
+   
 
-    if (checkCollisions(Player_x, Player_y)):
+    if (checkCollisions1(Player_x, Player_y)):
         Player_y= Player_y - Player_y_speed
         Player_x= Player_x - Player_x_speed
         Player_x_speed = 0
@@ -215,15 +255,13 @@ while running:
     if Player_x <=0:
         Player_x = 0
     
+    
     for i in range(number_of_enemies):
         ENEMY_X[i]+=ENEMY_SPEED[i]
-
         if ENEMY_X[i]<=600:
             ENEMY_X[i] = rt(1000,1010)
             ENEMY_Y[i] = rt(40,536)
         
-
-
         draw(ENEMY[i],ENEMY_X[i],ENEMY_Y[i])
 
 
