@@ -15,12 +15,15 @@ pygame.display.set_caption('Shooter')
 start_ticks=pygame.time.get_ticks()
 
 # <---IMAGES-->
-player = pygame.image.load('target-shooter.png')
+player = pygame.image.load('player.png')
 Bullet_Player = pygame.image.load('001-bullet.png')
 number_of_enemies = 3
 
 
 clock = pygame.time.Clock()
+
+# <---LEVEL-->
+level = 1
 
 # <---MAP--->
 
@@ -90,6 +93,10 @@ ENEMY_X = []
 ENEMY_Y = []
 ENEMY_SPEED = []
 
+ENEMY_STATE = "MOVING"
+
+ENEMY_STOP_POS_X = rt(800,900)
+ENEMY_STOP_POS_Y = rt(0,536)
 
 for x in range(number_of_enemies):
     ENEMY.append(pygame.image.load("shooter.png"))
@@ -105,6 +112,8 @@ Bullet_Y = Player_y
 bullet_state = "Ready"
 # [BULLET][ENEMY]
 
+# [SCORE]
+score = 0
 
 # [FONTS]
 font = pygame.font.Font('freesansbold.ttf',22)
@@ -122,7 +131,7 @@ def show_time():
 
 def check_collision(x1,y1,x2,y2):
     d = sqrt((pow(x2-x1 ,2))+(pow(y2-y1,2)))
-    if d < 27:
+    if d < 37:
         return True
     else: 
         return False
@@ -132,6 +141,16 @@ def fire_bullet_P1(x,y):
     bullet_state = "Fire"    
     draw(Bullet_Player,x+16,y+10)
 
+def find_prime():
+    num = rt(10,100)
+    for x in range(2,10):
+        if num%x==0:
+            return False
+    else:
+        return True
+    
+
+
 #Draw Text
 lives_label = font.render(f"Lives: {str(lives)}",1,(0,0,0))
 
@@ -140,12 +159,12 @@ def checkCollisions1(x_pos, y_pos):
     string_x_pos = str(x_pos)
     string_y_pos = str(y_pos)
     cords = font.render(f"{x_pos, y_pos}",1,(0,0,0))
-    draw(cords,890,80)
+    draw(cords,890,70)
     if x_pos <= 160  and x_pos >= 40 and y_pos >= 378:
         return True
-    if x_pos <= 160 and x_pos >= 40 and y_pos <= 236:
+    if x_pos <= 160 and x_pos >= 40 and y_pos <= 238:
         return True
-    if x_pos >= 210 and x_pos <= 360 and y_pos >= 98 and y_pos <= 398:
+    if x_pos >= 210 and x_pos <= 360 and y_pos >= 98 and y_pos <= 399:
         return True
     if x_pos >= 510:
         return True
@@ -154,7 +173,7 @@ def checkCollisions1(x_pos, y_pos):
 
 running = True
 while running:
-
+    
     tileX = 0
     tileY = 0
     tile_dict = {0:pygame.image.load('concrete.png'),1: pygame.image.load("tile.png"),2:pygame.image.load('line.png')}
@@ -163,35 +182,35 @@ while running:
     lives_label = font.render(f"Lives: {str(lives)}",True,(0,0,0))
     
     
-    # drawing image
-    #for row in map1:
-    #    for x in row:
-    #        if x == 0:
-    #            draw(tile_dict[0],tileX, tileY)
-    #            tileX += 40
-    #        if x == 1:
-    #            draw(tile_dict[1],tileX,tileY)
-    #            tileX += 40
-    #        if x == 2:
-    #            draw(tile_dict[2],tileX,tileY)
-    #            tileX += 40#
-    #    tileX = 0
-    #    tileY += 40 
-
-    #Draw map2
-    for row in map2:
+     #drawing image
+    for row in map1:
         for x in row:
-            if x==0:
+            if x == 0:
                 draw(tile_dict[0],tileX, tileY)
                 tileX += 40
             if x == 1:
                 draw(tile_dict[1],tileX,tileY)
                 tileX += 40
-            if x==2:
-                draw(tile_dct[2],tileX,tileY)
-                tileX += 40
+            if x == 2:
+                draw(tile_dict[2],tileX,tileY)
+                tileX += 40#
         tileX = 0
-        tileY += 40
+        tileY += 40 
+
+    # Draw map2
+    #for row in map2:
+    #    for x in row:
+    #        if x==0:
+    #            draw(tile_dict[0],tileX, tileY)
+    #            tileX += 40
+    #        if x == 1:
+    #            draw(tile_dict[1],tileX,tileY)
+    #            tileX += 40
+    #        if x==2:
+    #            draw(tile_dct[2],tileX,tileY)
+    #            tileX += 40
+    #    tileX = 0
+    #    tileY += 40
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -225,15 +244,21 @@ while running:
             if event.key == pygame.K_w or event.key == pygame.K_a or event.key == pygame.K_s or event.key == pygame.K_d:
                 Player_x_speed = 0
                 Player_y_speed = 0
+        
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if bullet_state == "Ready" :
+                Bullet_X = Player_x
+                Bullet_Y = Player_y
+                fire_bullet_P1(Bullet_X,Bullet_Y) 
 
 
     Player_y+=Player_y_speed
     Player_x+=Player_x_speed
-   
 
-    if (checkCollisions1(Player_x, Player_y)):
-        Player_y= Player_y - Player_y_speed
-        Player_x= Player_x - Player_x_speed
+
+    if checkCollisions1(Player_x, Player_y):
+        Player_y -= Player_y_speed
+        Player_x -= Player_x_speed
         Player_x_speed = 0
         Player_y_speed = 0
 
@@ -242,7 +267,7 @@ while running:
         Bullet_X+=Bullet_X_speed
         bullet_FLIP = False
         
-    if Bullet_X>=900:
+    if Bullet_X>=1000:
         bullet_state = "Ready"
         Bullet_x = Player_x
     
@@ -258,16 +283,28 @@ while running:
     
     for i in range(number_of_enemies):
         ENEMY_X[i]+=ENEMY_SPEED[i]
+       
         if ENEMY_X[i]<=600:
             ENEMY_X[i] = rt(1000,1010)
             ENEMY_Y[i] = rt(40,536)
         
+        if ENEMY_X[i] == ENEMY_STOP_POS_X :
+            ENEMY_STATE = "STOP"
+       
+        if check_collision(Bullet_X,Bullet_Y,ENEMY_X[i],ENEMY_Y[i]) :  
+            ENEMY_Y[i] = 2000
+            level+=1
+        if find_prime():
+            print("shoot")
+        if ENEMY_STATE == "STOP":
+            ENEMY_X[i] = ENEMY_STOP_POS_X
+       
         draw(ENEMY[i],ENEMY_X[i],ENEMY_Y[i])
 
 
     show_time()
     draw(lives_label,890,40)
     draw(player, Player_x, Player_y)
-
+    
     pygame.display.update()
     clock.tick(60)
