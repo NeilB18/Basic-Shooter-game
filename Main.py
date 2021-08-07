@@ -15,7 +15,7 @@ pygame.display.set_caption('Shooter')
 
 # <--_TIME-->
 start_ticks=pygame.time.get_ticks()
-
+cooldown = 2000 
 # <---IMAGES-->
 player = pygame.image.load('player.png')
 Bullet_Player = pygame.image.load('001-bullet.png')
@@ -27,7 +27,7 @@ clock = pygame.time.Clock()
 # <---LEVEL-->
 level = 1
 
-# <---MAP--->
+# <---LEVEL 1 MAP--->
 
 map1 = [
     [0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
@@ -49,7 +49,7 @@ map1 = [
 
 
 
-# <----Level2 Map---->
+# <----LEVEL 2 MAP---->
 
 map2 = [
     [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
@@ -158,15 +158,15 @@ lives_label = font.render(f"Lives: {str(lives)}",True,(236,47,50))
 
 # Check for Collisions
 def checkCollisions1(x_pos, y_pos):
-
+    global lives
     if x_pos <= 160  and x_pos >= 40 and y_pos >= 378:
         return True
     if x_pos <= 160 and x_pos >= 40 and y_pos <= 238:
         return True
     if x_pos >= 210 and x_pos <= 360 and y_pos >= 98 and y_pos <= 399:
         return True
-    if x_pos >= 510:
-        return True
+    if Player_x >= 510:
+        lives-=0.01
     return (x_pos >= 936) or (x_pos < 0) or (y_pos < 0) or ( y_pos >= 536)
     
 
@@ -178,7 +178,7 @@ while running:
     tile_dict = {0:pygame.image.load('concrete.png'),1: pygame.image.load("tile.png"),2:pygame.image.load('line.png')}
 
     #Draw Text
-    lives_label = font.render(f"Lives: {str(lives)}",True,(236,47,50))
+    lives_label = font.render(f"Lives: {str(int(lives))}",True,(236,47,50))
     
     
     #drawing image
@@ -265,10 +265,12 @@ while running:
         fire_bullet_P1(Bullet_X,Bullet_Y)
         Bullet_X+=Bullet_X_speed
         bullet_FLIP = False
-        
+    if checkCollisions1(Bullet_X,Bullet_Y):
+        bullet_state = "Ready"
+        Bullet_X = Player_x
     if Bullet_X>=1000:
         bullet_state = "Ready"
-        Bullet_x = Player_x
+        Bullet_X = Player_x
     
     if Player_y>=536:
         Player_y = 536
@@ -293,8 +295,12 @@ while running:
         if check_collision(Bullet_X,Bullet_Y,ENEMY_X[i],ENEMY_Y[i]) :  
             ENEMY_Y[i] = 2000
             level+=1
-        if find_prime():
-            print("shoot")
+        now = pygame.time.get_ticks()
+        cooldown=rt(500,2000)
+        if now - start_ticks >= cooldown:
+            start_ticks = now
+            print("-->fired")
+       
         if ENEMY_STATE == "STOP":
             ENEMY_X[i] = ENEMY_STOP_POS_X
        
