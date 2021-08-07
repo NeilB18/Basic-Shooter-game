@@ -1,7 +1,9 @@
-from random import randint as rt
-import pygame
 from math import *
+from random import randint as rt
+
+import pygame
 from pygame import *
+
 pygame.init()
 
 
@@ -119,7 +121,6 @@ score = 0
 font = pygame.font.Font('freesansbold.ttf',22)
 
 # <---FUNCTIONS--->
-
 def draw(name,x,y):
     screen.blit(name,(x,y))
 
@@ -141,8 +142,9 @@ def fire_bullet_P1(x,y):
     bullet_state = "Fire"    
     draw(Bullet_Player,x+16,y+10)
 
+
 def find_prime():
-    num = rt(10,100)
+    num = rt(-10,10)
     for x in range(2,10):
         if num%x==0:
             return False
@@ -152,14 +154,11 @@ def find_prime():
 
 
 #Draw Text
-lives_label = font.render(f"Lives: {str(lives)}",1,(0,0,0))
+lives_label = font.render(f"Lives: {str(lives)}",True,(236,47,50))
 
 # Check for Collisions
 def checkCollisions1(x_pos, y_pos):
-    string_x_pos = str(x_pos)
-    string_y_pos = str(y_pos)
-    cords = font.render(f"{x_pos, y_pos}",1,(0,0,0))
-    draw(cords,890,70)
+
     if x_pos <= 160  and x_pos >= 40 and y_pos >= 378:
         return True
     if x_pos <= 160 and x_pos >= 40 and y_pos <= 238:
@@ -179,10 +178,10 @@ while running:
     tile_dict = {0:pygame.image.load('concrete.png'),1: pygame.image.load("tile.png"),2:pygame.image.load('line.png')}
 
     #Draw Text
-    lives_label = font.render(f"Lives: {str(lives)}",True,(0,0,0))
+    lives_label = font.render(f"Lives: {str(lives)}",True,(236,47,50))
     
     
-     #drawing image
+    #drawing image
     for row in map1:
         for x in row:
             if x == 0:
