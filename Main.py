@@ -19,6 +19,8 @@ cooldown = 2000
 # <---IMAGES-->
 player = pygame.image.load('player.png')
 Bullet_Player = pygame.image.load('001-bullet.png')
+bullet_enemy = pygame.image.load('laser.png')
+GAME_OVER_SCREEN = pygame.image.load('game_over_screen.png')
 number_of_enemies = 3
 
 
@@ -89,6 +91,19 @@ Player_y_speed = 0
 lives = 5
 timer = 0 
 
+# [BULLET][PLAYER]
+Bullet_X_speed = 70
+Bullet_X = Player_x
+Bullet_Y = Player_y
+bullet_state = "Ready"
+
+# [BULLET][ENEMY]
+bullet_state_enemy = "Ready"
+LASER = pygame.transform.rotate(bullet_enemy, 270)
+LASER_LIST = []
+LASER_X = []
+LASER_Y = []
+LASER_SPEED = []
 # [ENEMIES]
 ENEMY = []
 ENEMY_X = []
@@ -100,25 +115,35 @@ ENEMY_STATE = "MOVING"
 ENEMY_STOP_POS_X = rt(800,900)
 ENEMY_STOP_POS_Y = rt(0,536)
 
+last = pygame.time.get_ticks()
+
 for x in range(number_of_enemies):
     ENEMY.append(pygame.image.load("shooter.png"))
     ENEMY_X.append(Enemy_x)
     ENEMY_Y.append(Enemy_y)
     ENEMY_SPEED.append(-5)
+    LASER_LIST.append(LASER)
+    LASER_X.append(Enemy_x)
+    LASER_Y.append(Enemy_y)
+    LASER_SPEED.append(-70)
 
 
-# [BULLET][PLAYER]
-Bullet_X_speed = 70
-Bullet_X = Player_x
-Bullet_Y = Player_y
-bullet_state = "Ready"
-# [BULLET][ENEMY]
+
+
+
+
 
 # [SCORE]
 score = 0
 
 # [FONTS]
 font = pygame.font.Font('freesansbold.ttf',22)
+
+# [GAME OVER SCREEN]
+OVER_X = 0
+OVER_Y = 0
+screen_speed =0
+
 
 # <---FUNCTIONS--->
 def draw(name,x,y):
@@ -142,6 +167,10 @@ def fire_bullet_P1(x,y):
     bullet_state = "Fire"    
     draw(Bullet_Player,x+16,y+10)
 
+def fire_bullet_enemy(x,y):
+    global bullet_state_enemy
+    bullet_state_enemy = "Fire"    
+    draw(LASER_LIST[i],x+16,y+10)   
 
 def find_prime():
     num = rt(-10,10)
@@ -167,12 +196,17 @@ def checkCollisions1(x_pos, y_pos):
         return True
     if Player_x >= 510:
         lives-=0.01
+        
     return (x_pos >= 936) or (x_pos < 0) or (y_pos < 0) or ( y_pos >= 536)
     
 
 running = True
 while running:
     
+
+
+   
+    pygame.display.flip()
     tileX = 0
     tileY = 0
     tile_dict = {0:pygame.image.load('concrete.png'),1: pygame.image.load("tile.png"),2:pygame.image.load('line.png')}
@@ -192,7 +226,8 @@ while running:
                 tileX += 40
             if x == 2:
                 draw(tile_dict[2],tileX,tileY)
-                tileX += 40#
+                tileX += 40
+
         tileX = 0
         tileY += 40 
 
@@ -210,7 +245,8 @@ while running:
     #            tileX += 40
     #    tileX = 0
     #    tileY += 40
-
+    if lives == 0:
+        draw(GAME_OVER_SCREEN,OVER_X,OVER_Y)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -265,6 +301,7 @@ while running:
         fire_bullet_P1(Bullet_X,Bullet_Y)
         Bullet_X+=Bullet_X_speed
         bullet_FLIP = False
+
     if checkCollisions1(Bullet_X,Bullet_Y):
         bullet_state = "Ready"
         Bullet_X = Player_x
@@ -281,33 +318,48 @@ while running:
     if Player_x <=0:
         Player_x = 0
     
-    
-    for i in range(number_of_enemies):
-        ENEMY_X[i]+=ENEMY_SPEED[i]
-       
-        if ENEMY_X[i]<=600:
-            ENEMY_X[i] = rt(1000,1010)
-            ENEMY_Y[i] = rt(40,536)
+    # Moving enemies to a forward position
+    if ENEMY_STATE != "STOP":
+        for i in range(number_of_enemies):
+            LASER_X[i] = ENEMY_X[i]
+            LASER_Y[i] = ENEMY_Y[i]
+            ENEMY_X[i]+=ENEMY_SPEED[i]
         
-        if ENEMY_X[i] == ENEMY_STOP_POS_X :
-            ENEMY_STATE = "STOP"
-       
+            if ENEMY_X[i]<=600:
+                ENEMY_X[i] = rt(1000,1010)
+                ENEMY_Y[i] = rt(40,536)
+            
+            if ENEMY_X[i] == ENEMY_STOP_POS_X :
+                ENEMY_STATE = "STOP"
+        
+           
+                ENEMY_X[i] = ENEMY_STOP_POS_X
+
+            draw(ENEMY[i],ENEMY_X[i],ENEMY_Y[i])
+    #firing of enemy bullets
+    for i in range(number_of_enemies):
+
         if check_collision(Bullet_X,Bullet_Y,ENEMY_X[i],ENEMY_Y[i]) :  
             ENEMY_Y[i] = 2000
             level+=1
         now = pygame.time.get_ticks()
-        cooldown=rt(500,2000)
-        if now - start_ticks >= cooldown:
-            start_ticks = now
-            print("-->fired")
-       
-        if ENEMY_STATE == "STOP":
-            ENEMY_X[i] = ENEMY_STOP_POS_X
-       
+        cooldown=10#rt(500,1000)
+        if now - last >= cooldown:
+            last = now  
+
+        fire_bullet_enemy(LASER_X[i],LASER_Y[i])      
+        LASER_X[i]-=70
+         
+        if LASER_X[i]<=0:
+            bullet_state_enemy = "Ready"
+            LASER_X[i]=ENEMY_X[i]
+            LASER_Y[i]=ENEMY_Y[i]
+            fire_bullet_enemy(LASER_X[i],LASER_Y[i])
         draw(ENEMY[i],ENEMY_X[i],ENEMY_Y[i])
 
 
     show_time()
+    
     draw(lives_label,890,40)
     draw(player, Player_x, Player_y)
     
