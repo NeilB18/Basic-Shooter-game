@@ -28,12 +28,12 @@ level = 1
 # <---MAP--->
 
 map1 = [
-    [0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,0 ,1 ,1 ,0 ,0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,0 ,1 ,1 ,0 ,0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [0 ,0 ,0 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [0 ,0 ,0 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [0 ,0 ,0 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [0 ,0 ,0 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [0 ,0 ,0 ,1 ,0 ,0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [0 ,0 ,0 ,1 ,0 ,0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
     [0 ,0 ,0 ,0 ,0 ,0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
     [0 ,0 ,0 ,0 ,0 ,0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
     [0 ,0 ,0 ,0 ,0 ,0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
@@ -68,7 +68,7 @@ map2 = [
 ]
 
 
-
+current_map = map1
 
 # Enemy Stuff
 Enemy_x = rt(1000,1010)
@@ -148,27 +148,11 @@ def find_prime():
             return False
     else:
         return True
-    
-
 
 #Draw Text
 lives_label = font.render(f"Lives: {str(lives)}",1,(0,0,0))
 
-# Check for Collisions
-def checkCollisions1(x_pos, y_pos):
-    string_x_pos = str(x_pos)
-    string_y_pos = str(y_pos)
-    cords = font.render(f"{x_pos, y_pos}",1,(0,0,0))
-    draw(cords,890,70)
-    if x_pos <= 160  and x_pos >= 40 and y_pos >= 378:
-        return True
-    if x_pos <= 160 and x_pos >= 40 and y_pos <= 238:
-        return True
-    if x_pos >= 210 and x_pos <= 360 and y_pos >= 98 and y_pos <= 399:
-        return True
-    if x_pos >= 510:
-        return True
-    return (x_pos >= 936) or (x_pos < 0) or (y_pos < 0) or ( y_pos >= 536)
+    
     
 
 running = True
@@ -181,36 +165,44 @@ while running:
     #Draw Text
     lives_label = font.render(f"Lives: {str(lives)}",True,(0,0,0))
     
+    def drawCords(x_pos, y_pos):
+        string_x_pos = str(x_pos)
+        string_y_pos = str(y_pos)
+        cords = font.render(f"{x_pos, y_pos}",1,(0,0,0))
+        draw(cords,890,70)
     
-     #drawing image
-    for row in map1:
-        for x in row:
-            if x == 0:
-                draw(tile_dict[0],tileX, tileY)
-                tileX += 40
-            if x == 1:
-                draw(tile_dict[1],tileX,tileY)
-                tileX += 40
-            if x == 2:
-                draw(tile_dict[2],tileX,tileY)
-                tileX += 40#
-        tileX = 0
-        tileY += 40 
+    
+    def drawMap(map,tileX,tileY):
+        for row in map:
+            for x in row:
+                if x == 0:
+                    draw(tile_dict[0],tileX, tileY)
+                    tileX += 40
+                if x == 1:
+                    draw(tile_dict[1],tileX, tileY)
+                    tileX += 40
+                if x == 2:
+                    draw(tile_dict[2],tileX, tileY)
+                    tileX += 40
+            tileX = 0
+            tileY += 40
 
-    # Draw map2
-    #for row in map2:
-    #    for x in row:
-    #        if x==0:
-    #            draw(tile_dict[0],tileX, tileY)
-    #            tileX += 40
-    #        if x == 1:
-    #            draw(tile_dict[1],tileX,tileY)
-    #            tileX += 40
-    #        if x==2:
-    #            draw(tile_dct[2],tileX,tileY)
-    #            tileX += 40
-    #    tileX = 0
-    #    tileY += 40
+   # Check for Collisions
+    def checkCollisions1(x_pos, y_pos, map):
+        x_map = int(x_pos/40)
+        y_map = int(y_pos/40)
+        if map[y_map][x_map] != 0:
+            print("Blocked !!!")
+            print(x_pos)
+            print(y_pos)
+            print("X Map =",x_map," Y Map =",y_map, " Matrix =",map[y_map][x_map])
+            return True
+        else:
+            return (x_pos >= 936) or (x_pos < 0) or (y_pos < 0) or ( y_pos >= 536)
+
+
+    drawMap(current_map,tileX,tileY)
+
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -251,16 +243,32 @@ while running:
                 Bullet_Y = Player_y
                 fire_bullet_P1(Bullet_X,Bullet_Y) 
 
+ 
 
-    Player_y+=Player_y_speed
+    # if x_pos <= 160  asnd x_pos >= 40 and y_pos >= 378:
+    #     return True
+    # if x_pos <= 160 and x_pos >= 40 and y_pos <= 238:
+    #     return True
+    # if x_pos >= 210 and x_pos <= 360 and y_pos >= 98 and y_pos <= 399:
+    #     return True
+    # if x_pos >= 510:
+    #     return True
+
+    
+    
+    if checkCollisions1(Player_x, Player_y, current_map):
+            Player_y -= Player_y_speed
+            Player_x -= Player_x_speed
+            Player_x_speed = 0
+            Player_y_speed = 0
+
+    
     Player_x+=Player_x_speed
+    Player_y+=Player_y_speed
+
+    drawCords(Player_x, Player_y)
 
 
-    if checkCollisions1(Player_x, Player_y):
-        Player_y -= Player_y_speed
-        Player_x -= Player_x_speed
-        Player_x_speed = 0
-        Player_y_speed = 0
 
     if bullet_state == "Fire":
         fire_bullet_P1(Bullet_X,Bullet_Y)
@@ -295,7 +303,8 @@ while running:
             ENEMY_Y[i] = 2000
             level+=1
         if find_prime():
-            print("shoot")
+            pass
+           # print("shoot")
         if ENEMY_STATE == "STOP":
             ENEMY_X[i] = ENEMY_STOP_POS_X
        
