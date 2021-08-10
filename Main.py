@@ -179,9 +179,13 @@ def show_time():
     draw(timer_label,890,40)
 
 def show_lives():
+    global damage_speed
     pygame.draw.rect(screen,(236,47,50),[890,10,100,20])
     pygame.draw.rect(screen,(40,208,90),[890,10,bar_width,20]) 
-    pygame.draw.rect(screen,(40,40,40),[890,10,100,20],4)
+    pygame.draw.rect(screen,(40,40,40),[890,10,100,20],3)
+    if bar_width ==0:
+        damage_speed = 0
+       
 
 def check_collision(x1,y1,x2,y2):
     d = sqrt((pow(x2-x1 ,2))+(pow(y2-y1,2)))
