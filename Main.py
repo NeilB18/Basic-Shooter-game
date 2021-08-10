@@ -21,6 +21,7 @@ player = pygame.image.load('player.png')
 Bullet_Player = pygame.image.load('001-bullet.png')
 bullet_enemy = pygame.image.load('laser.png')
 GAME_OVER_SCREEN = pygame.image.load('game_over_screen.png')
+Shield = pygame.image.load('002-shield.png')
 number_of_enemies = 3
 
 
@@ -42,7 +43,7 @@ map1 = [
     [0 ,0 ,0 ,0 ,0 ,0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
     [0 ,0 ,0 ,0 ,0 ,0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
     [0 ,0 ,0 ,0 ,0 ,0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], # 8,15
     [0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0],
     [0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0],
     [0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0],
@@ -128,11 +129,6 @@ for x in range(number_of_enemies):
     LASER_SPEED.append(-70)
 
 
-
-
-
-
-
 # [SCORE]
 score = 0
 
@@ -144,16 +140,52 @@ OVER_X = 0
 OVER_Y = 0
 screen_speed =0
 
+# [HEALTHBAR]
+bar_width = 100
+green_bar = pygame.Rect(890,40,200,20)
+damage_speed = 0.01
 
 # <---FUNCTIONS--->
 def draw(name,x,y):
     screen.blit(name,(x,y))
 
+def drawing_bg(map1):
+  
+    tileX = 0
+    tileY = 0
+    tile_dict = {0:pygame.image.load('concrete.png'),1: pygame.image.load("tile.png"),2:pygame.image.load('line.png')}
+    for row in map1:
+        for x in row:
+            if x == 0:
+                draw(tile_dict[0],tileX, tileY)
+                tileX += 40
+            if x == 1:
+                draw(tile_dict[1],tileX,tileY)
+                tileX += 40
+            if x == 2:
+                draw(tile_dict[2],tileX,tileY)
+                tileX += 40
+
+
+                    
+
+        tileX = 0
+        tileY += 40 
+
 
 def show_time():
     seconds = int((pygame.time.get_ticks()-start_ticks)/1000)    
     timer_label = font.render(f"Time: {seconds}", True ,(0,0,0))
-    draw(timer_label,890,10)
+    draw(timer_label,890,40)
+
+def show_lives():
+    global damage_speed
+    pygame.draw.rect(screen,(236,47,50),[890,10,100,20])
+    pygame.draw.rect(screen,(40,208,90),[890,10,bar_width,20]) 
+    pygame.draw.rect(screen,(40,40,40),[890,10,100,20],3)
+    if bar_width ==0:
+        damage_speed = 0
+       
 
 def check_collision(x1,y1,x2,y2):
     d = sqrt((pow(x2-x1 ,2))+(pow(y2-y1,2)))
@@ -179,78 +211,79 @@ def find_prime():
             return False
     else:
         return True
+    
+def enemy_firing():
+    global score,bullet_state_enemy,bar_width
+    for i in range(number_of_enemies):
+
+        if check_collision(Bullet_X,Bullet_Y,ENEMY_X[i],ENEMY_Y[i]) :  
+            ENEMY_Y[i] = 2000
+            score+=1
+        
+        fire_bullet_enemy(LASER_X[i],LASER_Y[i])     
+
+        LASER_X[i]-=40
+         
+        if LASER_X[i]<=0 or checkCollisions1(LASER_X[i],LASER_Y[i]):
+            bullet_state_enemy = "Ready"
+            LASER_X[i]=ENEMY_X[i]
+            LASER_Y[i]=ENEMY_Y[i]
+            fire_bullet_enemy(LASER_X[i],LASER_Y[i])
+        
+        if check_collision(Player_x,Player_y,LASER_X[i],LASER_Y[i]):
+            damage_speed = 0.5
+            bar_width-=damage_speed
+
+        draw(ENEMY[i],ENEMY_X[i],ENEMY_Y[i])
+
+def moving_enemy():
+    global ENEMY_STATE
+    if ENEMY_STATE != "STOP":
+        for i in range(number_of_enemies):
+            LASER_X[i] = ENEMY_X[i]
+            LASER_Y[i] = ENEMY_Y[i]
+            ENEMY_X[i]+=ENEMY_SPEED[i]
+        
+            if ENEMY_X[i]<=600:
+                ENEMY_X[i] = rt(1000,1010)
+                ENEMY_Y[i] = rt(40,536)
+            
+            if ENEMY_X[i] == ENEMY_STOP_POS_X :
+                ENEMY_STATE = "STOP"
+        
+           
+                ENEMY_X[i] = ENEMY_STOP_POS_X
+
+            draw(ENEMY[i],ENEMY_X[i],ENEMY_Y[i])        
+
+def let_player_proceed():
+
+    map1[8][15] == 1
 
 #Draw Text
 lives_label = font.render(f"Lives: {str(lives)}",True,(236,47,50))
 
 # Check for Collisions
 def checkCollisions1(x_pos, y_pos):
-    global lives
+    global bar_width,damage_speed
     if x_pos <= 160  and x_pos >= 40 and y_pos >= 378:
         return True
     if x_pos <= 160 and x_pos >= 40 and y_pos <= 238:
         return True
     if x_pos >= 210 and x_pos <= 360 and y_pos >= 98 and y_pos <= 399:
         return True
-    if Player_x >= 510:
-        lives-=0.01
+    if Player_x >= 510 and Player_x<=550:
+        bar_width-=damage_speed
         
     return (x_pos >= 936) or (x_pos < 0) or (y_pos < 0) or ( y_pos >= 536)
     
 
 running = True
 while running:
-    
 
+    # DRAWING TILE MAP
+    drawing_bg(map1)
 
-   
-    pygame.display.flip()
-    tileX = 0
-    tileY = 0
-    tile_dict = {0:pygame.image.load('concrete.png'),1: pygame.image.load("tile.png"),2:pygame.image.load('line.png')}
-
-    #Draw Text
-    lives_label = font.render(f"Lives: {str(int(lives))}",True,(236,47,50))
-    
-    def drawCords(x_pos, y_pos):
-        string_x_pos = str(x_pos)
-        string_y_pos = str(y_pos)
-        cords = font.render(f"{x_pos, y_pos}",1,(0,0,0))
-        draw(cords,890,70)
-    
-    
-    #drawing image
-    for row in map1:
-        for x in row:
-            if x == 0:
-                draw(tile_dict[0],tileX, tileY)
-                tileX += 40
-            if x == 1:
-                draw(tile_dict[1],tileX,tileY)
-                tileX += 40
-            if x == 2:
-                draw(tile_dict[2],tileX,tileY)
-                tileX += 40
-
-        tileX = 0
-        tileY += 40 
-
-    # Draw map2
-    #for row in map2:
-    #    for x in row:
-    #        if x==0:
-    #            draw(tile_dict[0],tileX, tileY)
-    #            tileX += 40
-    #        if x == 1:
-    #            draw(tile_dict[1],tileX,tileY)
-    #            tileX += 40
-    #        if x==2:
-    #            draw(tile_dct[2],tileX,tileY)
-    #            tileX += 40
-    #    tileX = 0
-    #    tileY += 40
-    if lives == 0:
-        draw(GAME_OVER_SCREEN,OVER_X,OVER_Y)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -338,50 +371,22 @@ while running:
     if Player_x <=0:
         Player_x = 0
     
+    
+
     # Moving enemies to a forward position
-    if ENEMY_STATE != "STOP":
-        for i in range(number_of_enemies):
-            LASER_X[i] = ENEMY_X[i]
-            LASER_Y[i] = ENEMY_Y[i]
-            ENEMY_X[i]+=ENEMY_SPEED[i]
-        
-            if ENEMY_X[i]<=600:
-                ENEMY_X[i] = rt(1000,1010)
-                ENEMY_Y[i] = rt(40,536)
-            
-            if ENEMY_X[i] == ENEMY_STOP_POS_X :
-                ENEMY_STATE = "STOP"
-        
-           
-                ENEMY_X[i] = ENEMY_STOP_POS_X
-
-            draw(ENEMY[i],ENEMY_X[i],ENEMY_Y[i])
+    moving_enemy()
     #firing of enemy bullets
-    for i in range(number_of_enemies):
+    enemy_firing()
 
-        if check_collision(Bullet_X,Bullet_Y,ENEMY_X[i],ENEMY_Y[i]) :  
-            ENEMY_Y[i] = 2000
-            level+=1
-        now = pygame.time.get_ticks()
-        cooldown=10#rt(500,1000)
-        if now - last >= cooldown:
-            last = now  
-
-        fire_bullet_enemy(LASER_X[i],LASER_Y[i])      
-        LASER_X[i]-=30
-         
-        if LASER_X[i]<=0:
-            bullet_state_enemy = "Ready"
-            LASER_X[i]=ENEMY_X[i]
-            LASER_Y[i]=ENEMY_Y[i]
-            fire_bullet_enemy(LASER_X[i],LASER_Y[i])
-        draw(ENEMY[i],ENEMY_X[i],ENEMY_Y[i])
-
-
+    if score <= 3:
+        let_player_proceed()
     show_time()
-    
-    draw(lives_label,890,40)
+    show_lives()
+
+    draw(Shield,800,90)
     draw(player, Player_x, Player_y)
-    
+    if bar_width == 0:
+        damage_speed = 0
+
     pygame.display.update()
     clock.tick(60)
