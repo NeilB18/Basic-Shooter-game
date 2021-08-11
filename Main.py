@@ -17,9 +17,11 @@ data = {
 }
 # LOADING THE DATA
 
-
-with open("Game_Data.txt") as game_data_file:
-    data = json.load(game_data_file)
+try:
+    with open("Game_Data.json") as game_data_file:
+        data = json.load(game_data_file)
+except:
+    print("Error")
 
 # <---SCREEN--->
 screen = pygame.display.set_mode((1000,600))
@@ -257,7 +259,7 @@ def enemy_firing():
             fire_bullet_enemy(LASER_X[i],LASER_Y[i])
         
         if check_collision(Player_x,Player_y,LASER_X[i],LASER_Y[i]):
-            damage_speed = 0.05
+            damage_speed = 0.5
             data["life"]-=damage_speed
 
         draw(ENEMY[i],ENEMY_X[i],ENEMY_Y[i])
@@ -312,7 +314,7 @@ while running:
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            with open('Game_Data.txt','w') as game_data_file:
+            with open('Game_Data.json','w') as game_data_file:
                 json.dump(data,game_data_file)
             running = False
         if event.type == pygame.KEYDOWN:
