@@ -11,6 +11,10 @@ pygame.init()
 
 i = 0
 
+# GAME DATA
+data = {
+    "life": 100
+}
 
 
 # <---SCREEN--->
@@ -133,16 +137,22 @@ for x in range(number_of_enemies):
     LASER_SPEED.append(-70)
 
 
+
+# LOADING THE DATA
+
+try:
+    with open("Data.txt") as game_data_file:
+        data = json.load(game_data_file)
+except:
+    print("Error")
+
 # [SCORE]
 score = 0
 
 # [FONTS]
 font = pygame.font.Font('freesansbold.ttf',22)
 
-# [GAME OVER SCREEN]
-OVER_X = 0
-OVER_Y = 0
-screen_speed =0
+
 
 # [HEALTHBAR]
 bar_width = 100
@@ -153,11 +163,6 @@ damage_speed = 0.01
 pygame.mouse.set_visible(False)
 mouse = pygame.image.load("001-crosshair.png")
 
-
-# GAME DATA
-data = {
-    "life": 100
-}
 
 
 
@@ -191,7 +196,7 @@ def drawing_bg(map1):
 def end_game():
     global screen_speed,OVER_Y
 
-    draw(GAME_OVER_SCREEN,OVER_X,OVER_Y)
+    draw(GAME_OVER_SCREEN,0,0)
 
 def show_time():
     seconds = int((pygame.time.get_ticks()-start_ticks)/1000)    
@@ -307,7 +312,7 @@ while running:
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            with open("Game_Data.txt","w") as game_data_file:
+            with open('Data.txt','w') as game_data_file:
                 json.dump(data,game_data_file)
             running = False
         if event.type == pygame.KEYDOWN:
@@ -395,6 +400,6 @@ while running:
     if data["life"] <= 0:
         end_game()
 
+
     pygame.display.update()
     clock.tick(60)
-print(data["life"])
