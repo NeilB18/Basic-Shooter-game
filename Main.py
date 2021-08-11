@@ -12,7 +12,7 @@ i = 0
 # <---SCREEN--->
 screen = pygame.display.set_mode((1000,600))
 pygame.display.set_caption('Shooter')
-
+pygame.display.set_icon(pygame.image.load('001-crosshair.png'))
 # <--_TIME-->
 start_ticks=pygame.time.get_ticks()
 cooldown = 2000 
@@ -43,7 +43,7 @@ map1 = [
     [0 ,0 ,0 ,0 ,0 ,0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
     [0 ,0 ,0 ,0 ,0 ,0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
     [0 ,0 ,0 ,0 ,0 ,0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], # 8,15
+    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
     [0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0],
     [0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0],
     [0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0],
@@ -145,6 +145,11 @@ bar_width = 100
 green_bar = pygame.Rect(890,40,200,20)
 damage_speed = 0.01
 
+# [MOUSE]
+pygame.mouse.set_visible(False)
+mouse = pygame.image.load("001-crosshair.png")
+
+
 # <---FUNCTIONS--->
 def draw(name,x,y):
     screen.blit(name,(x,y))
@@ -172,6 +177,10 @@ def drawing_bg(map1):
         tileX = 0
         tileY += 40 
 
+def end_game():
+    global screen_speed,OVER_Y
+
+    draw(GAME_OVER_SCREEN,OVER_X,OVER_Y)
 
 def show_time():
     seconds = int((pygame.time.get_ticks()-start_ticks)/1000)    
@@ -266,7 +275,7 @@ lives_label = font.render(f"Lives: {str(lives)}",True,(236,47,50))
 # Check for Collisions
 def checkCollisions1(x_pos, y_pos):
     global bar_width,damage_speed
-    if x_pos <= 160  and x_pos >= 40 and y_pos >= 378:
+    if x_pos <= 160  and x_pos >= 40 and y_pos >= 390:
         return True
     if x_pos <= 160 and x_pos >= 40 and y_pos <= 238:
         return True
@@ -280,7 +289,7 @@ def checkCollisions1(x_pos, y_pos):
 
 running = True
 while running:
-
+    mouse_x,mouse_y = pygame.mouse.get_pos()
     # DRAWING TILE MAP
     drawing_bg(map1)
 
@@ -326,7 +335,7 @@ while running:
 
     Player_y+=Player_y_speed
     Player_x+=Player_x_speed
-
+    OVER_Y+=screen_speed
 
     if checkCollisions1(Player_x, Player_y):
         Player_y -= Player_y_speed
@@ -362,15 +371,14 @@ while running:
     #firing of enemy bullets
     enemy_firing()
 
-    if score <= 3:
-        let_player_proceed()
     show_time()
     show_lives()
-
-    draw(Shield,800,90)
+    
+    draw(Shield,80,90)
     draw(player, Player_x, Player_y)
-    if bar_width == 0:
-        damage_speed = 0
+    draw(mouse,mouse_x,mouse_y)
+    if bar_width <= 0:
+        end_game()
 
     pygame.display.update()
     clock.tick(60)
