@@ -15,7 +15,11 @@ i = 0
 data = {
     "life": 100
 }
+# LOADING THE DATA
 
+
+with open("Game_Data.txt") as game_data_file:
+    data = json.load(game_data_file)
 
 # <---SCREEN--->
 screen = pygame.display.set_mode((1000,600))
@@ -138,13 +142,9 @@ for x in range(number_of_enemies):
 
 
 
-# LOADING THE DATA
 
-try:
-    with open("Data.txt") as game_data_file:
-        data = json.load(game_data_file)
-except:
-    print("Error")
+
+
 
 # [SCORE]
 score = 0
@@ -312,7 +312,7 @@ while running:
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            with open('Data.txt','w') as game_data_file:
+            with open('Game_Data.txt','w') as game_data_file:
                 json.dump(data,game_data_file)
             running = False
         if event.type == pygame.KEYDOWN:
