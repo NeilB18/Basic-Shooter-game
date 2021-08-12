@@ -15,11 +15,14 @@ data = {
     "life": 100,
     
 }
+
 # LOADING THE DATA
 
 try:
     with open("Game_Data.json") as game_data_file:
         data = json.load(game_data_file)
+        if data["life"]<=0:
+            data["life"]=100
 except:
     print("Error")
 
