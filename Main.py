@@ -1,5 +1,4 @@
 import json
-
 from math import *
 from random import randint as rt
 
@@ -13,7 +12,8 @@ i = 0
 
 # GAME DATA
 data = {
-    "life": 100
+    "life": 100,
+    
 }
 # LOADING THE DATA
 
@@ -163,7 +163,7 @@ damage_speed = 0.01
 
 # [MOUSE]
 pygame.mouse.set_visible(False)
-mouse = pygame.image.load("001-crosshair.png")
+mouse = pygame.image.load("crosshair.png")
 
 
 
@@ -240,12 +240,12 @@ def find_prime():
         return True
     
 def enemy_firing():
-    global score,bullet_state_enemy,data
+    global score,bullet_state_enemy,data,number_of_enemies
     for i in range(number_of_enemies):
 
         if check_collision(Bullet_X,Bullet_Y,ENEMY_X[i],ENEMY_Y[i]) :  
             ENEMY_Y[i] = 2000
-            score+=1
+            number_of_enemies-=1
 
 
         fire_bullet_enemy(LASER_X[i],LASER_Y[i])     
