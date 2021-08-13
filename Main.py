@@ -420,8 +420,9 @@ while running:
 
     if data["life"]<=0:
         end_game()
-    if data["ammo"]<=0:
-        data["ammo"]=100
+    elif data["ammo"]<=0:
+        bullet_state = "Ready"
+        data["ammo"] = 0
 
     pygame.display.update()
     clock.tick(120)
