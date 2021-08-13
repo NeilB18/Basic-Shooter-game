@@ -13,7 +13,7 @@ i = 0
 # GAME DATA
 data = {
     "life": 100,
-    
+    "ammo": 100
 }
 
 # LOADING THE DATA
@@ -21,8 +21,10 @@ data = {
 try:
     with open("Game_Data.json") as game_data_file:
         data = json.load(game_data_file)
-        if data["life"]<=0:
-            data["life"]=100
+    if data["life"] <= 0:
+        data["life"]=100
+    elif data["ammo"]<=0:
+        data["ammo"] = 100
 except:
     print("Error")
 
@@ -114,6 +116,8 @@ Bullet_X_speed = 70
 Bullet_X = Player_x
 Bullet_Y = Player_y
 bullet_state = "Ready"
+
+bullet_damage = 1
 
 # [BULLET][ENEMY]
 bullet_state_enemy = "Ready"
@@ -210,12 +214,20 @@ def show_time():
 
 def show_lives():
     global damage_speed
-    pygame.draw.rect(screen,(236,47,50),[890,10,100,20])
-    pygame.draw.rect(screen,(40,208,90),[890,10,data["life"],20]) 
+    pygame.draw.rect(screen,(40,40,40),[890,10,100,20])
+    pygame.draw.rect(screen,(240,60,69),[890,10,data["life"],20]) 
     pygame.draw.rect(screen,(40,40,40),[890,10,100,20],3)
-    if data["life"] ==0:
+    draw(pygame.image.load('001-heart.png'),870,3)
+    
+    if data["life"] <=0:
         damage_speed = 0
-       
+
+def show_hydration_level():
+    global data
+    pygame.draw.rect(screen,(40,40,40),[890,45,100,20])
+    pygame.draw.rect(screen,(226,193,5),[890,45,data["ammo"],20]) 
+    pygame.draw.rect(screen,(40,40,40),[890,45,100,20],3)
+    draw(pygame.image.load('bullet.png'),865,36)
 
 def check_collision(x1,y1,x2,y2):
     d = sqrt((pow(x2-x1 ,2))+(pow(y2-y1,2)))
@@ -248,7 +260,7 @@ def enemy_firing():
 
         if check_collision(Bullet_X,Bullet_Y,ENEMY_X[i],ENEMY_Y[i]) :  
             ENEMY_Y[i] = 2000
-            number_of_enemies-=1
+   
 
 
         fire_bullet_enemy(LASER_X[i],LASER_Y[i])     
@@ -371,6 +383,7 @@ while running:
     if bullet_state == "Fire":
         fire_bullet_P1(Bullet_X,Bullet_Y)
         Bullet_X+=Bullet_X_speed
+        data["ammo"] -=bullet_damage
         bullet_FLIP = False
 
     if checkCollisions1(Bullet_X,Bullet_Y):
@@ -396,15 +409,19 @@ while running:
     #firing of enemy bullets
     enemy_firing()
 
-    show_time()
+    # show_time()
     show_lives()
+    show_hydration_level()
     
     draw(Shield,80,90)
     draw(player, Player_x, Player_y)
     draw(mouse,mouse_x,mouse_y)
-    if data["life"] <= 0:
-        end_game()
 
+
+    if data["life"]<=0:
+        end_game()
+    if data["ammo"]<=0:
+        data["ammo"]=100
 
     pygame.display.update()
-    clock.tick(60)
+    clock.tick(120)
