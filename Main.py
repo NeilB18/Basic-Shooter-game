@@ -12,8 +12,9 @@ i = 0
 
 # GAME DATA
 data = {
-    "life": 100,
-    "ammo": 100
+    "life": 150,
+    "ammo": 100,
+    'water': 100
 }
 
 # LOADING THE DATA
@@ -22,7 +23,7 @@ try:
     with open("Game_Data.json") as game_data_file:
         data = json.load(game_data_file)
     if data["life"] <= 0:
-        data["life"]=100
+        data["life"]=150
     elif data["ammo"]<=0:
         data["ammo"] = 100
 except:
@@ -214,20 +215,28 @@ def show_time():
 
 def show_lives():
     global damage_speed
-    pygame.draw.rect(screen,(40,40,40),[890,10,100,20])
-    pygame.draw.rect(screen,(240,60,69),[890,10,data["life"],20]) 
-    pygame.draw.rect(screen,(40,40,40),[890,10,100,20],3)
-    draw(pygame.image.load('001-heart.png'),870,3)
+    pygame.draw.rect(screen,(40,40,40),[20,10,150,20])
+    pygame.draw.rect(screen,(240,60,69),[20,10,data["life"],20]) 
+    pygame.draw.rect(screen,(40,40,40),[20,10,150,20],3)
+    draw(pygame.image.load('001-heart.png'),0,3)
     
     if data["life"] <=0:
         damage_speed = 0
 
-def show_hydration_level():
+def show_ammo():
     global data
     pygame.draw.rect(screen,(40,40,40),[890,45,100,20])
     pygame.draw.rect(screen,(226,193,5),[890,45,data["ammo"],20]) 
     pygame.draw.rect(screen,(40,40,40),[890,45,100,20],3)
     draw(pygame.image.load('bullet.png'),865,36)
+
+def show_water_level():
+    global data
+    pygame.draw.rect(screen,(40,40,40),[890,10,100,20])
+    pygame.draw.rect(screen,(0,149,213),[890,10,data["water"],20]) 
+    pygame.draw.rect(screen,(40,40,40),[890,10,100,20],3)
+    draw(pygame.image.load('water-drop.png'),865,3)
+    
 
 def check_collision(x1,y1,x2,y2):
     d = sqrt((pow(x2-x1 ,2))+(pow(y2-y1,2)))
@@ -335,6 +344,8 @@ while running:
         if event.type == pygame.KEYDOWN:
 
             if event.key == pygame.K_ESCAPE:
+                with open('Game_Data.json','w') as game_data_file:
+                    json.dump(data,game_data_file)
                 running = False
 
 
@@ -409,10 +420,10 @@ while running:
     #firing of enemy bullets
     enemy_firing()
 
-    # show_time()
+
     show_lives()
-    show_hydration_level()
-    
+    show_ammo()
+    show_water_level()
     draw(Shield,80,90)
     draw(player, Player_x, Player_y)
     draw(mouse,mouse_x,mouse_y)
