@@ -1,7 +1,6 @@
 import json
 from math import *
 from random import randint as rt
-
 import pygame
 from pygame import *
 
@@ -94,6 +93,11 @@ map2 = [
 
 
 current_map = map1
+
+# Sheild stuff
+Shield_x = 390
+Shield_y = rt(60,500)
+
 
 # Enemy Stuff
 Enemy_x = rt(1000,1010)
@@ -312,8 +316,7 @@ def let_player_proceed():
 
     map1[8][15] == 1
 
-#Draw Text
-lives_label = font.render(f"Lives: {str(lives)}",True,(236,47,50))
+
 
 # Check for Collisions
 def checkCollisions1(x_pos, y_pos):
@@ -328,7 +331,13 @@ def checkCollisions1(x_pos, y_pos):
         data["life"]-=0.01
         
     return (x_pos >= 936) or (x_pos < 0) or (y_pos < 0) or ( y_pos >= 536)
-    
+
+
+def shield_collision(Shield_x, Shield_y, Player_x, Player_y):
+    if check_collision(Shield_x, Shield_y, Player_x, Player_y):
+        return True
+
+shield_activate = font.render(f"Shield is activated", 0,(0,0,0))   
 
 running = True
 while running:
@@ -379,11 +388,10 @@ while running:
                 Bullet_Y = Player_y
                 fire_bullet_P1(Bullet_X,Bullet_Y) 
 
- 
-
 
     Player_x+=Player_x_speed
     Player_y+=Player_y_speed
+
     
     if checkCollisions1(Player_x, Player_y):
             Player_y -= Player_y_speed
@@ -413,6 +421,8 @@ while running:
     if Player_x <=0:
         Player_x = 0
     
+    if shield_collision(Shield_x, Shield_y, Player_x, Player_y):
+        draw(shield_activate,40,40)
     
 
     # Moving enemies to a forward position
@@ -424,10 +434,10 @@ while running:
     show_lives()
     show_ammo()
     show_water_level()
-    draw(Shield,80,90)
+    draw(Shield,Shield_x,Shield_y)
     draw(player, Player_x, Player_y)
     draw(mouse,mouse_x,mouse_y)
-
+   
 
     if data["life"]<=0:
         end_game()
