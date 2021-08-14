@@ -26,13 +26,15 @@ try:
         data["life"]=150
     elif data["ammo"]<=0:
         data["ammo"] = 100
+    elif data["hunger"]<=0:
+        data["hunger"] = 100
 except:
     print("Error")
 
 # <---SCREEN--->
 screen = pygame.display.set_mode((1000,600))
 pygame.display.set_caption('Shooter')
-pygame.display.set_icon(pygame.image.load('001-crosshair.png'))
+pygame.display.set_icon(pygame.image.load('aggro.png'))
 # <--_TIME-->
 start_ticks=pygame.time.get_ticks()
 cooldown = 2000 
@@ -232,12 +234,12 @@ def show_ammo():
     pygame.draw.rect(screen,(40,40,40),[890,45,100,20],3)
     draw(pygame.image.load('bullet.png'),865,36)
 
-def show_water_level():
+def show_hunger_level():
     global data
     pygame.draw.rect(screen,(40,40,40),[890,10,100,20])
     pygame.draw.rect(screen,(215,127,74),[890,10,data["hunger"],20]) 
     pygame.draw.rect(screen,(40,40,40),[890,10,100,20],3)
-    draw(pygame.image.load('meat.png'),870,3)
+    draw(pygame.image.load('meat.png'),868,3)
     
 
 def check_collision(x1,y1,x2,y2):
@@ -429,8 +431,8 @@ while running:
 
     show_lives()
     show_ammo()
-    show_water_level()
-    show_time()
+    show_hunger_level()
+   
     draw(Shield,80,90)
     draw(player, Player_x, Player_y)
     draw(mouse,mouse_x,mouse_y)
@@ -441,6 +443,8 @@ while running:
     elif data["ammo"]<=0:
         bullet_state = "Ready"
         data["ammo"] = 0
+    if data["hunger"] <=0:
+        end_game()
 
     pygame.display.update()
     clock.tick(60)
