@@ -12,8 +12,8 @@ i = 0
 # GAME DATA
 data = {
     "life": 150,
-    "ammo": 100,
-    'water': 100
+    "ammo": 10,
+    'hunger': 100
 }
 
 # LOADING THE DATA
@@ -25,13 +25,15 @@ try:
         data["life"]=150
     elif data["ammo"]<=0:
         data["ammo"] = 100
+    elif data["hunger"]<=0:
+        data["hunger"] = 100
 except:
     print("Error")
 
 # <---SCREEN--->
 screen = pygame.display.set_mode((1000,600))
 pygame.display.set_caption('Shooter')
-pygame.display.set_icon(pygame.image.load('001-crosshair.png'))
+pygame.display.set_icon(pygame.image.load('aggro.png'))
 # <--_TIME-->
 start_ticks=pygame.time.get_ticks()
 cooldown = 2000 
@@ -115,6 +117,8 @@ Player_x_speed = 0
 Player_y_speed = 0
 lives = 5
 timer = 0 
+moving = False
+
 
 # [BULLET][PLAYER]
 Bullet_X_speed = 70
@@ -213,7 +217,7 @@ def end_game():
     draw(GAME_OVER_SCREEN,0,0)
 
 def show_time():
-    seconds = int((pygame.time.get_ticks()-start_ticks)/1000)    
+       
     timer_label = font.render(f"Time: {seconds}", True ,(0,0,0))
     draw(timer_label,890,40)
 
@@ -234,12 +238,12 @@ def show_ammo():
     pygame.draw.rect(screen,(40,40,40),[890,45,100,20],3)
     draw(pygame.image.load('bullet.png'),865,36)
 
-def show_water_level():
+def show_hunger_level():
     global data
     pygame.draw.rect(screen,(40,40,40),[890,10,100,20])
-    pygame.draw.rect(screen,(0,149,213),[890,10,data["water"],20]) 
+    pygame.draw.rect(screen,(215,127,74),[890,10,data["hunger"],20]) 
     pygame.draw.rect(screen,(40,40,40),[890,10,100,20],3)
-    draw(pygame.image.load('water-drop.png'),865,3)
+    draw(pygame.image.load('meat.png'),868,3)
     
 
 def check_collision(x1,y1,x2,y2):
@@ -287,8 +291,9 @@ def enemy_firing():
             fire_bullet_enemy(LASER_X[i],LASER_Y[i])
         
         if check_collision(Player_x,Player_y,LASER_X[i],LASER_Y[i]):
-            damage_speed = 0.5
-            data["life"]-=damage_speed
+            if not shield_collision(Shield_x,Shield_y,Player_x,Player_y):
+             damage_speed = 0.5
+             data["life"]-=damage_speed
 
         draw(ENEMY[i],ENEMY_X[i],ENEMY_Y[i])
 
@@ -328,23 +333,30 @@ def checkCollisions1(x_pos, y_pos):
     if x_pos >= 210 and x_pos <= 360 and y_pos >= 98 and y_pos <= 399:
         return True
     if Player_x >= 510 and Player_x<=550:
-        data["life"]-=0.01
+        data["life"]-=0.02
         
     return (x_pos >= 936) or (x_pos < 0) or (y_pos < 0) or ( y_pos >= 536)
 
+shield_activate = 0
 
-def shield_collision(Shield_x, Shield_y, Player_x, Player_y):
+def shield_collision(Shield_x, Shield_y, Player_x, Player_y,shield_activate):
     if check_collision(Shield_x, Shield_y, Player_x, Player_y):
+        shield_activate = 1
         return True
+    else:
+        return False
 
-shield_activate = font.render(f"Shield is activated", 0,(0,0,0))   
+
+shield_activate = 0
+if shield_activate == 0:
+    shield_activate_writing = font.render(f"Shield is activated", 0,(0,0,0))   
 
 running = True
 while running:
     mouse_x,mouse_y = pygame.mouse.get_pos()
     # DRAWING TILE MAP
     drawing_bg(map1)
-
+    seconds = int((pygame.time.get_ticks()-start_ticks)/1000) 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             with open('Game_Data.json','w') as game_data_file:
@@ -360,17 +372,17 @@ while running:
 
             if event.key == pygame.K_w:
                 Player_y_speed=-10
-                
+                moving = True
             if event.key == pygame.K_a:
                 Player_x_speed =-10
-
+                moving = True
 
             if event.key == pygame.K_s:
                 Player_y_speed = 10
-                
+                moving = True
             if event.key == pygame.K_d:
                 Player_x_speed = 10
-
+                moving = True
             if event.key == pygame.K_SPACE:
                 if bullet_state == "Ready" :
                     Bullet_X = Player_x
@@ -381,6 +393,7 @@ while running:
             if event.key == pygame.K_w or event.key == pygame.K_a or event.key == pygame.K_s or event.key == pygame.K_d:
                 Player_x_speed = 0
                 Player_y_speed = 0
+                moving = False
         
         if event.type == pygame.MOUSEBUTTONDOWN:
             if bullet_state == "Ready" :
@@ -421,9 +434,13 @@ while running:
     if Player_x <=0:
         Player_x = 0
     
-    if shield_collision(Shield_x, Shield_y, Player_x, Player_y):
-        draw(shield_activate,40,40)
+    if shield_collision(Shield_x, Shield_y, Player_x, Player_y,shield_activate):
+        draw(shield_activate_writing,40,40)
     
+    if moving == True and seconds%7 ==0 :
+        data['hunger']-=0.05
+    elif moving == False:
+        data["hunger"]+=0
 
     # Moving enemies to a forward position
     moving_enemy()
@@ -433,7 +450,7 @@ while running:
 
     show_lives()
     show_ammo()
-    show_water_level()
+    show_hunger_level()
     draw(Shield,Shield_x,Shield_y)
     draw(player, Player_x, Player_y)
     draw(mouse,mouse_x,mouse_y)
@@ -444,6 +461,8 @@ while running:
     elif data["ammo"]<=0:
         bullet_state = "Ready"
         data["ammo"] = 0
+    if data["hunger"] <=0:
+        end_game()
 
     pygame.display.update()
-    clock.tick(120)
+    clock.tick(60)
