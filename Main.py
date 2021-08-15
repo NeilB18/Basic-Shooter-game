@@ -336,7 +336,6 @@ def checkCollisions1(x_pos, y_pos):
         data["life"]-=0.02
         
     return (x_pos >= 936) or (x_pos < 0) or (y_pos < 0) or ( y_pos >= 536)
-
 shield_activate = 0
 
 def shield_collision(Shield_x, Shield_y, Player_x, Player_y,shield_activate):
