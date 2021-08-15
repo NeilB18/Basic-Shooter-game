@@ -24,10 +24,12 @@ try:
         data = json.load(game_data_file)
     if data["life"] <= 0:
         data["life"]=150
+        data["hunger"] = 100
     elif data["ammo"]<=0:
         data["ammo"] = 100
     elif data["hunger"]<=0:
         data["hunger"] = 100
+        data["life"] =150
 except:
     print("Error")
 
@@ -43,7 +45,7 @@ player = pygame.image.load('player.png')
 Bullet_Player = pygame.image.load('001-bullet.png')
 bullet_enemy = pygame.image.load('laser.png')
 GAME_OVER_SCREEN = pygame.image.load('game_over_screen.png')
-Shield = pygame.image.load('002-shield.png')
+crate = pygame.image.load('crate.png')
 number_of_enemies = 3
 
 
@@ -122,7 +124,7 @@ Bullet_X = Player_x
 Bullet_Y = Player_y
 bullet_state = "Ready"
 
-bullet_damage = 1
+bullet_damage = 0.05
 
 # [BULLET][ENEMY]
 bullet_state_enemy = "Ready"
@@ -177,8 +179,19 @@ damage_speed = 0.01
 pygame.mouse.set_visible(False)
 mouse = pygame.image.load("crosshair.png")
 
+# [CRATE]
+
+items = {
+    0: "Food",
+    1: "Ammo",
+    2: "Health"
+}
 
 
+crate_x = rt(0,550)
+crate_y = rt(0,536)
+
+shield_on = False
 
 # <---FUNCTIONS--->
 def draw(name,x,y):
@@ -287,9 +300,8 @@ def enemy_firing():
             fire_bullet_enemy(LASER_X[i],LASER_Y[i])
         
         if check_collision(Player_x,Player_y,LASER_X[i],LASER_Y[i]):
-            damage_speed = 0.5
-            data["life"]-=damage_speed
-
+            
+            data["life"]-=bullet_damage
         draw(ENEMY[i],ENEMY_X[i],ENEMY_Y[i])
 
 def moving_enemy():
@@ -312,10 +324,11 @@ def moving_enemy():
 
             draw(ENEMY[i],ENEMY_X[i],ENEMY_Y[i])        
 
-def let_player_proceed():
-
-    map1[8][15] == 1
-
+def check_for_shield():
+    if shield_on == True:
+        return True
+    else:
+        return False
 #Draw Text
 lives_label = font.render(f"Lives: {str(lives)}",True,(236,47,50))
 
@@ -336,6 +349,9 @@ def checkCollisions1(x_pos, y_pos):
 
 running = True
 while running:
+
+    stuff = rt(0,2)
+
     mouse_x,mouse_y = pygame.mouse.get_pos()
     # DRAWING TILE MAP
     drawing_bg(map1)
@@ -390,6 +406,10 @@ while running:
     Player_x+=Player_x_speed
     Player_y+=Player_y_speed
     
+    if checkCollisions1(crate_x,crate_y):
+        crate_x = rt(0,550)
+        crate_y = rt(0,536)
+
     if checkCollisions1(Player_x, Player_y):
             Player_y -= Player_y_speed
             Player_x -= Player_x_speed
@@ -409,6 +429,31 @@ while running:
         bullet_state = "Ready"
         Bullet_X = Player_x
     
+    if check_collision(Player_x,Player_y,crate_x,crate_y):
+        crate_x = rt(0,550)
+        crate_y = rt(0,536)
+        if items[stuff] == "Health":
+            shield_on = False
+            data["life"]+=20
+            print("You ave recieved +20 health")
+
+            
+        elif items[stuff] == "Ammo":
+            shield_on = False
+            data["ammo"]+=20
+            if bullet_state == "Ready":
+                bullet_state = "Fire"
+    
+            print("You have recieved +2 bullets")
+
+        elif items[stuff] == "Food":
+            data["hunger"]+=10
+            data["life"]+=5
+            print("+10 hunger")
+            
+
+
+
     if Player_y>=536:
         Player_y = 536
     if Player_y <0:
@@ -433,7 +478,7 @@ while running:
     show_ammo()
     show_hunger_level()
    
-    draw(Shield,80,90)
+    draw(crate,crate_x,crate_y)
     draw(player, Player_x, Player_y)
     draw(mouse,mouse_x,mouse_y)
 
@@ -443,8 +488,14 @@ while running:
     elif data["ammo"]<=0:
         bullet_state = "Ready"
         data["ammo"] = 0
+        
     if data["hunger"] <=0:
         end_game()
-
+    if data["life"]>=150:
+        data["life"] =150
+    if data["ammo"]>=100:
+        data["ammo"]=100
+    if data["hunger"]>=100:
+        data["hunger"]=100
     pygame.display.update()
     clock.tick(60)
