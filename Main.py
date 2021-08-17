@@ -291,7 +291,7 @@ def enemy_firing():
             fire_bullet_enemy(LASER_X[i],LASER_Y[i])
         
         if check_collision(Player_x,Player_y,LASER_X[i],LASER_Y[i]):
-            if not shield_collision(Shield_x,Shield_y,Player_x,Player_y):
+            if not shield_activate:
              damage_speed = 0.5
              data["life"]-=damage_speed
 
@@ -336,19 +336,15 @@ def checkCollisions1(x_pos, y_pos):
         data["life"]-=0.02
         
     return (x_pos >= 936) or (x_pos < 0) or (y_pos < 0) or ( y_pos >= 536)
-shield_activate = 0
 
 def shield_collision(Shield_x, Shield_y, Player_x, Player_y,shield_activate):
     if check_collision(Shield_x, Shield_y, Player_x, Player_y):
-        shield_activate = 1
         return True
     else:
         return False
 
 
-shield_activate = 0
-if shield_activate == 0:
-    shield_activate_writing = font.render(f"Shield is activated", 0,(0,0,0))   
+shield_activate = False
 
 running = True
 while running:
@@ -404,7 +400,8 @@ while running:
     Player_x+=Player_x_speed
     Player_y+=Player_y_speed
 
-    
+
+
     if checkCollisions1(Player_x, Player_y):
             Player_y -= Player_y_speed
             Player_x -= Player_x_speed
@@ -433,8 +430,13 @@ while running:
     if Player_x <=0:
         Player_x = 0
     
-    if shield_collision(Shield_x, Shield_y, Player_x, Player_y,shield_activate):
+    if shield_activate:
+        shield_activate_writing = font.render(f"Shield is activated", 0,(0,0,0)) 
         draw(shield_activate_writing,40,40)
+    
+    if shield_collision(Shield_x, Shield_y, Player_x, Player_y,shield_activate):
+        shield_activate = True
+        
     
     if moving == True and seconds%7 ==0 :
         data['hunger']-=0.05
