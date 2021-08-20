@@ -338,6 +338,8 @@ def checkCollisions1(x_pos, y_pos):
     return (x_pos >= 936) or (x_pos < 0) or (y_pos < 0) or ( y_pos >= 536)
 
 def shield_collision(Shield_x, Shield_y, Player_x, Player_y,shield_activate):
+    if shield_activate:
+        return False
     if check_collision(Shield_x, Shield_y, Player_x, Player_y):
         return True
     else:
@@ -433,6 +435,7 @@ while running:
     if shield_activate:
         shield_activate_writing = font.render(f"Shield is activated", 0,(0,0,0)) 
         draw(shield_activate_writing,40,40)
+        
     
     if shield_collision(Shield_x, Shield_y, Player_x, Player_y,shield_activate):
         shield_activate = True
@@ -452,7 +455,8 @@ while running:
     show_lives()
     show_ammo()
     show_hunger_level()
-    draw(Shield,Shield_x,Shield_y)
+    if not shield_activate: 
+        draw(Shield,Shield_x,Shield_y)
     draw(player, Player_x, Player_y)
     draw(mouse,mouse_x,mouse_y)
    
