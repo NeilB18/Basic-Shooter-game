@@ -99,7 +99,8 @@ current_map = map1
 # Sheild stuff
 Shield_x = 390
 Shield_y = rt(60,500)
-
+shield_strenght = 0    
+shield_activate = False
 
 # Enemy Stuff
 Enemy_x = rt(1000,1010)
@@ -271,8 +272,9 @@ def find_prime():
     else:
         return True
     
+
 def enemy_firing():
-    global score,bullet_state_enemy,data,number_of_enemies
+    global score,bullet_state_enemy,data,number_of_enemies, shield_activate, shield_strenght
     for i in range(number_of_enemies):
 
         if check_collision(Bullet_X,Bullet_Y,ENEMY_X[i],ENEMY_Y[i]) :  
@@ -291,9 +293,15 @@ def enemy_firing():
             fire_bullet_enemy(LASER_X[i],LASER_Y[i])
         
         if check_collision(Player_x,Player_y,LASER_X[i],LASER_Y[i]):
+            if shield_activate:
+                shield_strenght = shield_strenght + 1
+                if shield_strenght >= 6:
+                    shield_activate = False
+            
             if not shield_activate:
              damage_speed = 0.5
              data["life"]-=damage_speed
+            
 
         draw(ENEMY[i],ENEMY_X[i],ENEMY_Y[i])
 
@@ -346,7 +354,7 @@ def shield_collision(Shield_x, Shield_y, Player_x, Player_y,shield_activate):
         return False
 
 
-shield_activate = False
+
 
 running = True
 while running:
@@ -432,6 +440,7 @@ while running:
     if Player_x <=0:
         Player_x = 0
     
+
     if shield_activate:
         shield_activate_writing = font.render(f"Shield is activated", 0,(0,0,0)) 
         draw(shield_activate_writing,40,40)
