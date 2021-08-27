@@ -43,7 +43,8 @@ Bullet_Player = pygame.image.load('001-bullet.png')
 bullet_enemy = pygame.image.load('laser.png')
 GAME_OVER_SCREEN = pygame.image.load('game_over_screen.png')
 Shield = pygame.image.load('002-shield.png')
-number_of_enemies = 3
+amo = pygame.image.load('bullet.png')
+number_of_enemies = 16
 
 
 clock = pygame.time.Clock()
@@ -95,6 +96,12 @@ map2 = [
 
 
 current_map = map1
+
+
+# Amo Stuff
+amo_x = 200
+amo_y = rt(50,500)
+amo_activate = False
 
 # Sheild stuff
 Shield_x = 390
@@ -353,6 +360,11 @@ def shield_collision(Shield_x, Shield_y, Player_x, Player_y,shield_activate):
     else:
         return False
 
+def amo_collision(amo_x,amo_y,Player_x,Player_y):
+    global data
+    if check_collision(amo_x,amo_y,Player_x,Player_y):
+        data["ammo"]+= 0.1
+        return True
 
 
 
@@ -388,11 +400,24 @@ while running:
             if event.key == pygame.K_d:
                 Player_x_speed = 10
                 moving = True
+            if event.key == pygame.K_UP:
+                Player_y_speed = -10
+                moving = True
+            if event.key == pygame.K_DOWN:
+                Player_y_speed = 10
+                moving = True
+            if event.key == pygame.K_LEFT:
+                Player_x_speed = -10
+                moving = True
+            if event.key == pygame.K_RIGHT:
+                Player_x_speed = 10
+                moving = True
             if event.key == pygame.K_SPACE:
                 if bullet_state == "Ready" :
                     Bullet_X = Player_x
                     Bullet_Y = Player_y
-                    fire_bullet_P1(Bullet_X,Bullet_Y)            
+                    fire_bullet_P1(Bullet_X,Bullet_Y)
+                        
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_w or event.key == pygame.K_a or event.key == pygame.K_s or event.key == pygame.K_d:
@@ -460,10 +485,12 @@ while running:
     #firing of enemy bullets
     enemy_firing()
 
-
+    amo_collision(amo_x, amo_y, Player_x, Player_y)
     show_lives()
     show_ammo()
     show_hunger_level()
+    if not amo_activate:
+        draw(amo,amo_x,amo_y)
     if not shield_activate: 
         draw(Shield,Shield_x,Shield_y)
     draw(player, Player_x, Player_y)
