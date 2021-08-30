@@ -1,7 +1,7 @@
 import json
 from math import *
+from os import write
 from random import randint as rt
-
 import pygame
 from pygame import *
 
@@ -43,9 +43,11 @@ cooldown = 2000
 # <---IMAGES-->
 player = pygame.image.load('player.png')
 Bullet_Player = pygame.image.load('001-bullet.png')
-bullet_enemy = pygame.image.load('laser.png')
+bullet_enemy = pygame.image.load('bullet (1).png')
+Shield = pygame.image.load('002-shield.png')
 GAME_OVER_SCREEN = pygame.image.load('game_over_screen.png')
 crate = pygame.image.load('crate.png')
+
 number_of_enemies = 3
 
 
@@ -83,12 +85,12 @@ map2 = [
     [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
     [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
     [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [0 ,0 ,0 ,0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [0 ,1 ,0 ,0 ,0 ,2 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [0 ,2 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
     [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
     [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
     [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0],
     [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0],
@@ -98,6 +100,11 @@ map2 = [
 
 
 current_map = map1
+
+# Sheild stuff
+Shield_x = 390
+Shield_y = rt(60,500)
+
 
 # Enemy Stuff
 Enemy_x = rt(1000,1010)
@@ -128,7 +135,7 @@ bullet_damage = 0.05
 
 # [BULLET][ENEMY]
 bullet_state_enemy = "Ready"
-LASER = pygame.transform.rotate(bullet_enemy, 270)
+LASER = pygame.transform.rotate(bullet_enemy, 90)
 LASER_LIST = []
 LASER_X = []
 LASER_Y = []
@@ -198,7 +205,7 @@ def draw(name,x,y):
     screen.blit(name,(x,y))
 
 def drawing_bg(map1):
-  
+    global tileX,tileY
     tileX = 0
     tileY = 0
     tile_dict = {0:pygame.image.load('concrete.png'),1: pygame.image.load("tile.png"),2:pygame.image.load('line.png')}
@@ -218,8 +225,9 @@ def drawing_bg(map1):
                     
 
         tileX = 0
-        tileY += 40 
+        tileY += 40
 
+    
 def end_game():
     global screen_speed,OVER_Y
 
@@ -272,13 +280,7 @@ def fire_bullet_enemy(x,y):
     bullet_state_enemy = "Fire"    
     draw(LASER_LIST[i],x+16,y+10)   
 
-def find_prime():
-    num = rt(-10,10)
-    for x in range(2,10):
-        if num%x==0:
-            return False
-    else:
-        return True
+
     
 def enemy_firing():
     global score,bullet_state_enemy,data,number_of_enemies
@@ -286,6 +288,7 @@ def enemy_firing():
 
         if check_collision(Bullet_X,Bullet_Y,ENEMY_X[i],ENEMY_Y[i]) :  
             ENEMY_Y[i] = 2000
+
    
 
 
@@ -300,8 +303,10 @@ def enemy_firing():
             fire_bullet_enemy(LASER_X[i],LASER_Y[i])
         
         if check_collision(Player_x,Player_y,LASER_X[i],LASER_Y[i]):
-            
-            data["life"]-=bullet_damage
+            if not shield_collision(Shield_x,Shield_y,Player_x,Player_y,shield_activate):
+                damage_speed = 0.5
+                data["life"]-=damage_speed
+        let_player_proceed()
         draw(ENEMY[i],ENEMY_X[i],ENEMY_Y[i])
 
 def moving_enemy():
@@ -324,13 +329,8 @@ def moving_enemy():
 
             draw(ENEMY[i],ENEMY_X[i],ENEMY_Y[i])        
 
-def check_for_shield():
-    if shield_on == True:
-        return True
-    else:
-        return False
-#Draw Text
-lives_label = font.render(f"Lives: {str(lives)}",True,(236,47,50))
+
+
 
 # Check for Collisions
 def checkCollisions1(x_pos, y_pos):
@@ -345,14 +345,54 @@ def checkCollisions1(x_pos, y_pos):
         data["life"]-=0.02
         
     return (x_pos >= 936) or (x_pos < 0) or (y_pos < 0) or ( y_pos >= 536)
-    
+shield_activate = 0
+
+def shield_collision(Shield_x, Shield_y, Player_x, Player_y,shield_activate):
+    if check_collision(Shield_x, Shield_y, Player_x, Player_y):
+        shield_activate = 1
+        return True
+    else:
+        return False
+
+def write(n,x,y):
+    stuff = font.render(n,True,(255,255,255))
+    draw(stuff,x,y)
+
+
+def let_player_proceed():
+    map1[6][14]=1 
+    map1[7][14]=1
+
+def distance(x1,y2,x2,y1):
+    d = sqrt((pow(x2-x1 ,2))+(pow(y2-y1,2)))
+    return d
+
+def player_angle(x1,y1,x2,y2):
+    global player, mouse_x, mouse_y
+    angle = cos((x1-x2)/(distance(x1,y1,x2,y2)))
+    player = pygame.transform.rotate(player,angle)
+    return angle
+
+def rotate(surface,angle):
+    global player,rotated_rect
+    rotated_surface= pygame.transform.rotozoom(surface,angle,1)
+    rotated_rect = rotated_surface.get_rect(center = (Player_x,Player_y))
+    return rotated_surface,rotated_rect
+def draw_player(name,center):
+    screen.blit(name, center)
+shield_activate = 0
+if shield_activate == 0:
+    shield_activate_writing = font.render(f"Shield is activated", 0,(0,0,0))   
+
 
 running = True
 while running:
 
+    
     stuff = rt(0,2)
-
+    
     mouse_x,mouse_y = pygame.mouse.get_pos()
+  
     # DRAWING TILE MAP
     drawing_bg(map1)
     seconds = int((pygame.time.get_ticks()-start_ticks)/1000) 
@@ -400,11 +440,11 @@ while running:
                 Bullet_Y = Player_y
                 fire_bullet_P1(Bullet_X,Bullet_Y) 
 
- 
 
 
     Player_x+=Player_x_speed
     Player_y+=Player_y_speed
+
     
     if checkCollisions1(crate_x,crate_y):
         crate_x = rt(0,550)
@@ -435,7 +475,7 @@ while running:
         if items[stuff] == "Health":
             shield_on = False
             data["life"]+=20
-            print("You ave recieved +20 health")
+            write("+20",300,10)
 
             
         elif items[stuff] == "Ammo":
@@ -451,6 +491,7 @@ while running:
             data["life"]+=5
             print("+10 hunger")
             
+    
 
 
 
@@ -463,11 +504,17 @@ while running:
     if Player_x <=0:
         Player_x = 0
     
+    if shield_collision(Shield_x, Shield_y, Player_x, Player_y,shield_activate):
+        draw(shield_activate_writing,40,40)
+    
     if moving == True and seconds%7 ==0 :
         data['hunger']-=0.05
     elif moving == False:
         data["hunger"]+=0
+    
 
+   
+   
     # Moving enemies to a forward position
     moving_enemy()
     #firing of enemy bullets
@@ -477,11 +524,13 @@ while running:
     show_lives()
     show_ammo()
     show_hunger_level()
-   
+    
     draw(crate,crate_x,crate_y)
-    draw(player, Player_x, Player_y)
-    draw(mouse,mouse_x,mouse_y)
+    draw(Shield,Shield_x,Shield_y)
+    draw(player,Player_x,Player_y)
 
+    draw(mouse,mouse_x,mouse_y)
+   
 
     if data["life"]<=0:
         end_game()
@@ -498,4 +547,4 @@ while running:
     if data["hunger"]>=100:
         data["hunger"]=100
     pygame.display.update()
-    clock.tick(60)
+    clock.tick(120)
