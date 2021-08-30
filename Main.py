@@ -1,10 +1,11 @@
 import json
 from math import *
+import sys
 from os import write
 from random import randint as rt
 import pygame
 from pygame import *
-
+from pygame.locals import *
 pygame.init()
 
 
@@ -81,21 +82,21 @@ map1 = [
 # <----LEVEL 2 MAP---->
 
 map2 = [
-    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,0 ,0 ,0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,1 ,0 ,0 ,0 ,2 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,2 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0],
-    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0],
-    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0],
-    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0]     
+    [2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,0 ,0 ,2 ,2 ,2 ,2 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,0 ,0 ,2 ,2 ,2 ,2 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,0 ,0 ,2 ,2 ,2 ,2 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0],
+    [2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0],
+    [2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0],
+    [2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0]     
 ]
 
 
@@ -131,7 +132,7 @@ Bullet_X = Player_x
 Bullet_Y = Player_y
 bullet_state = "Ready"
 
-bullet_damage = 0.05
+bullet_damage = 1
 
 # [BULLET][ENEMY]
 bullet_state_enemy = "Ready"
@@ -280,14 +281,14 @@ def fire_bullet_enemy(x,y):
     bullet_state_enemy = "Fire"    
     draw(LASER_LIST[i],x+16,y+10)   
 
-
-    
 def enemy_firing():
     global score,bullet_state_enemy,data,number_of_enemies
     for i in range(number_of_enemies):
 
         if check_collision(Bullet_X,Bullet_Y,ENEMY_X[i],ENEMY_Y[i]) :  
             ENEMY_Y[i] = 2000
+            score+=1
+        
 
    
 
@@ -306,6 +307,7 @@ def enemy_firing():
             if not shield_collision(Shield_x,Shield_y,Player_x,Player_y,shield_activate):
                 damage_speed = 0.5
                 data["life"]-=damage_speed
+            
         let_player_proceed()
         draw(ENEMY[i],ENEMY_X[i],ENEMY_Y[i])
 
@@ -328,9 +330,6 @@ def moving_enemy():
                 ENEMY_X[i] = ENEMY_STOP_POS_X
 
             draw(ENEMY[i],ENEMY_X[i],ENEMY_Y[i])        
-
-
-
 
 # Check for Collisions
 def checkCollisions1(x_pos, y_pos):
@@ -358,40 +357,125 @@ def write(n,x,y):
     stuff = font.render(n,True,(255,255,255))
     draw(stuff,x,y)
 
-
 def let_player_proceed():
     map1[6][14]=1 
     map1[7][14]=1
 
-def distance(x1,y2,x2,y1):
-    d = sqrt((pow(x2-x1 ,2))+(pow(y2-y1,2)))
-    return d
-
-def player_angle(x1,y1,x2,y2):
-    global player, mouse_x, mouse_y
-    angle = cos((x1-x2)/(distance(x1,y1,x2,y2)))
-    player = pygame.transform.rotate(player,angle)
-    return angle
-
-def rotate(surface,angle):
-    global player,rotated_rect
-    rotated_surface= pygame.transform.rotozoom(surface,angle,1)
-    rotated_rect = rotated_surface.get_rect(center = (Player_x,Player_y))
-    return rotated_surface,rotated_rect
 def draw_player(name,center):
     screen.blit(name, center)
+
+def click():
+    global mouse_click
+    if mouse_click == True:
+        return True
+    else:
+        return False
+
+
+def options():
+    global mouse_click,screen
+    full_screen_on = False
+    running1 = True
+    while running1:
+        mouse_x,mouse_y = pygame.mouse.get_pos()
+        draw(pygame.image.load('bg_2.png'),0,0)
+        back_button = pygame.Rect(0,550,200,50)
+        fullescreen_button = pygame.Rect(400,275,200,50)
+        draw(pygame.image.load('back_button.png'),0,550)
+        draw(pygame.image.load('of.png'),400,275)
+        if back_button.collidepoint((mouse_x,mouse_y)):
+            draw(pygame.image.load('back_button2.png'),0,550)
+            if click():
+                running1 = False
+        if fullescreen_button.collidepoint((mouse_x,mouse_y)):
+            if click():
+                full_screen_on = True
+                if full_screen_on == True:
+                    screen = pygame.display.set_mode((screen.get_width(),screen.get_height()),pygame.FULLSCREEN)
+
+        for ev in pygame.event.get():
+            if ev.type == pygame.QUIT:
+                sys.exit()
+            if ev.type == pygame.MOUSEBUTTONDOWN:
+                mouse_click = True
+            else:
+                mouse_click = False
+        
+                
+                    
+                   
+        pygame.display.update()
+
+
+def show_menu():
+    global running,mouse_click,running2
+    pygame.mouse.set_visible(True)
+    running1 = True
+    button_1 = pygame.Rect(400,275,200,50)
+    button_2 = pygame.Rect(400,395,200,50)
+    button_3 = pygame.Rect(400,335,200,50)
+    while running1:
+        draw(pygame.image.load('bg_1.png'),0,0)
+        draw(pygame.image.load('start button.png'),400,275)
+        draw(pygame.image.load('exit_button.png'),400,395)
+        draw(pygame.image.load('Options.png'),400,335)
+        mouse_x,mouse_y = pygame.mouse.get_pos()
+        if button_1.collidepoint((mouse_x,mouse_y)):
+            draw(pygame.image.load('start button-2.png'),400,275)
+            if click():
+                running = True
+                running1 = False
+                mouse_click = False
+                
+    
+        if button_2.collidepoint((mouse_x,mouse_y)):
+            draw(pygame.image.load('exit.png'),400,395)
+            if click():
+                running = False
+                running1 = False
+                mouse_click = False
+                sys.exit()
+
+        if button_3.collidepoint((mouse_x,mouse_y)):
+            draw(pygame.image.load('Options2.png'),400,335)
+            if click():
+       
+        
+                options()
+
+        for ev in pygame.event.get():
+            if ev.type == pygame.QUIT:
+                running = False
+                running1 = False
+                sys.exit()
+            if ev.type == pygame.MOUSEBUTTONDOWN:
+                mouse_click = True
+            else:
+                mouse_click = False
+
+        
+        
+        pygame.display.update()
+            
+    
+
 shield_activate = 0
 if shield_activate == 0:
     shield_activate_writing = font.render(f"Shield is activated", 0,(0,0,0))   
 
+# monitor_size = [pygame.display.Info().current.w,pygame.display.Info().current.h]
 
-running = True
+mouse_click = False
+full_screen_on = False
+running = False
+show_menu()
 while running:
-
-    
+   
+    mouse_x,mouse_y = pygame.mouse.get_pos()
+    pygame.mouse.set_visible(False)
     stuff = rt(0,2)
     
-    mouse_x,mouse_y = pygame.mouse.get_pos()
+
   
     # DRAWING TILE MAP
     drawing_bg(map1)
@@ -401,12 +485,15 @@ while running:
             with open('Game_Data.json','w') as game_data_file:
                 json.dump(data,game_data_file)
             running = False
+            sys.exit()
+
         if event.type == pygame.KEYDOWN:
 
             if event.key == pygame.K_ESCAPE:
                 with open('Game_Data.json','w') as game_data_file:
                     json.dump(data,game_data_file)
                 running = False
+                sys.exit()
 
 
             if event.key == pygame.K_w:
@@ -426,7 +513,11 @@ while running:
                 if bullet_state == "Ready" :
                     Bullet_X = Player_x
                     Bullet_Y = Player_y
-                    fire_bullet_P1(Bullet_X,Bullet_Y)            
+                    fire_bullet_P1(Bullet_X,Bullet_Y)   
+        
+                
+            if event.key == pygame.K_r:
+                screen = pygame.display.set_mode((1000,600))        
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_w or event.key == pygame.K_a or event.key == pygame.K_s or event.key == pygame.K_d:
@@ -546,5 +637,6 @@ while running:
         data["ammo"]=100
     if data["hunger"]>=100:
         data["hunger"]=100
+ 
     pygame.display.update()
     clock.tick(120)
