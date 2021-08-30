@@ -46,10 +46,9 @@ player = pygame.image.load('player.png')
 Bullet_Player = pygame.image.load('001-bullet.png')
 bullet_enemy = pygame.image.load('bullet (1).png')
 Shield = pygame.image.load('002-shield.png')
-GAME_OVER_SCREEN = pygame.image.load('game_over_screen.png')
-crate = pygame.image.load('crate.png')
-
-number_of_enemies = 3
+game_over_screen = pygame.image.load('game_over_screen.png')
+amo = pygame.image.load('bullet.png')
+number_of_enemies = 16
 
 
 clock = pygame.time.Clock()
@@ -102,10 +101,17 @@ map2 = [
 
 current_map = map1
 
+
+# Amo Stuff
+amo_x = 200
+amo_y = rt(50,500)
+amo_activate = False
+
 # Sheild stuff
 Shield_x = 390
 Shield_y = rt(60,500)
-
+shield_strenght = 0    
+shield_activate = False
 
 # Enemy Stuff
 Enemy_x = rt(1000,1010)
@@ -230,9 +236,9 @@ def drawing_bg(map1):
 
     
 def end_game():
-    global screen_speed,OVER_Y
+    global screen_speed,OVER_Y,GAME_OVER_SCREEN
 
-    draw(GAME_OVER_SCREEN,0,0)
+    draw(game_over_screen,0,0)
 
 def show_time():
        
@@ -281,8 +287,17 @@ def fire_bullet_enemy(x,y):
     bullet_state_enemy = "Fire"    
     draw(LASER_LIST[i],x+16,y+10)   
 
+def find_prime():
+    num = rt(-10,10)
+    for x in range(2,10):
+        if num%x==0:
+            return False
+    else:
+        return True
+    
+
 def enemy_firing():
-    global score,bullet_state_enemy,data,number_of_enemies
+    global score,bullet_state_enemy,data,number_of_enemies, shield_activate, shield_strenght
     for i in range(number_of_enemies):
 
         if check_collision(Bullet_X,Bullet_Y,ENEMY_X[i],ENEMY_Y[i]) :  
@@ -304,11 +319,16 @@ def enemy_firing():
             fire_bullet_enemy(LASER_X[i],LASER_Y[i])
         
         if check_collision(Player_x,Player_y,LASER_X[i],LASER_Y[i]):
-            if not shield_collision(Shield_x,Shield_y,Player_x,Player_y,shield_activate):
-                damage_speed = 0.5
-                data["life"]-=damage_speed
+            if shield_activate:
+                shield_strenght = shield_strenght + 1
+                if shield_strenght >= 6:
+                    shield_activate = False
             
-        let_player_proceed()
+            if not shield_activate:
+             damage_speed = 0.5
+             data["life"]-=damage_speed
+            
+
         draw(ENEMY[i],ENEMY_X[i],ENEMY_Y[i])
 
 def moving_enemy():
@@ -344,11 +364,11 @@ def checkCollisions1(x_pos, y_pos):
         data["life"]-=0.02
         
     return (x_pos >= 936) or (x_pos < 0) or (y_pos < 0) or ( y_pos >= 536)
-shield_activate = 0
 
 def shield_collision(Shield_x, Shield_y, Player_x, Player_y,shield_activate):
+    if shield_activate:
+        return False
     if check_collision(Shield_x, Shield_y, Player_x, Player_y):
-        shield_activate = 1
         return True
     else:
         return False
@@ -459,9 +479,6 @@ def show_menu():
             
     
 
-shield_activate = 0
-if shield_activate == 0:
-    shield_activate_writing = font.render(f"Shield is activated", 0,(0,0,0))   
 
 # monitor_size = [pygame.display.Info().current.w,pygame.display.Info().current.h]
 
@@ -509,15 +526,24 @@ while running:
             if event.key == pygame.K_d:
                 Player_x_speed = 10
                 moving = True
+            if event.key == pygame.K_UP:
+                Player_y_speed = -10
+                moving = True
+            if event.key == pygame.K_DOWN:
+                Player_y_speed = 10
+                moving = True
+            if event.key == pygame.K_LEFT:
+                Player_x_speed = -10
+                moving = True
+            if event.key == pygame.K_RIGHT:
+                Player_x_speed = 10
+                moving = True
             if event.key == pygame.K_SPACE:
                 if bullet_state == "Ready" :
                     Bullet_X = Player_x
                     Bullet_Y = Player_y
-                    fire_bullet_P1(Bullet_X,Bullet_Y)   
-        
-                
-            if event.key == pygame.K_r:
-                screen = pygame.display.set_mode((1000,600))        
+                    fire_bullet_P1(Bullet_X,Bullet_Y)
+                        
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_w or event.key == pygame.K_a or event.key == pygame.K_s or event.key == pygame.K_d:
@@ -536,10 +562,6 @@ while running:
     Player_x+=Player_x_speed
     Player_y+=Player_y_speed
 
-    
-    if checkCollisions1(crate_x,crate_y):
-        crate_x = rt(0,550)
-        crate_y = rt(0,536)
 
     if checkCollisions1(Player_x, Player_y):
             Player_y -= Player_y_speed
@@ -595,8 +617,15 @@ while running:
     if Player_x <=0:
         Player_x = 0
     
-    if shield_collision(Shield_x, Shield_y, Player_x, Player_y,shield_activate):
+
+    if shield_activate:
+        shield_activate_writing = font.render(f"Shield is activated", 0,(0,0,0)) 
         draw(shield_activate_writing,40,40)
+        
+    
+    if shield_collision(Shield_x, Shield_y, Player_x, Player_y,shield_activate):
+        shield_activate = True
+        
     
     if moving == True and seconds%7 ==0 :
         data['hunger']-=0.05
@@ -611,15 +640,14 @@ while running:
     #firing of enemy bullets
     enemy_firing()
 
-
     show_lives()
     show_ammo()
     show_hunger_level()
-    
-    draw(crate,crate_x,crate_y)
-    draw(Shield,Shield_x,Shield_y)
-    draw(player,Player_x,Player_y)
-
+    if not amo_activate:
+        draw(amo,amo_x,amo_y)
+    if not shield_activate: 
+        draw(Shield,Shield_x,Shield_y)
+    draw(player, Player_x, Player_y)
     draw(mouse,mouse_x,mouse_y)
    
 
