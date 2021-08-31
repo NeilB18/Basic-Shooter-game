@@ -420,10 +420,7 @@ def options():
                 if full_screen_on == True:
                     screen = pygame.display.set_mode((screen.get_width(),screen.get_height()),pygame.FULLSCREEN)
                     draw(pygame.image.load('on.png'),400,275)
-            
-     
-
-
+   
         for ev in pygame.event.get():
             if ev.type == pygame.QUIT:
 
@@ -436,6 +433,8 @@ def options():
         
         if full_screen_on == True:
             draw(pygame.image.load('on.png'),400,275)
+        else:
+            draw(pygame.image.load('off.png'),400,275)
  
                     
                    
