@@ -6,6 +6,7 @@ from random import randint as rt
 import pygame
 from pygame import *
 from pygame.locals import *
+
 pygame.init()
 
 
@@ -66,21 +67,21 @@ level = 1
 # <---LEVEL 1 MAP--->
 
 map1 = [
-    [0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,0 ,1 ,1 ,0 ,0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,0 ,1 ,1 ,0 ,0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
-    [0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0],
-    [0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0],
-    [0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0],
-    [0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0] 
+    [1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,2 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1], 
+    [1 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [1 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [1 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [1 ,0 ,1 ,1 ,0 ,0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [1 ,0 ,1 ,1 ,0 ,0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [1 ,0 ,0 ,0 ,0 ,0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [1 ,0 ,0 ,0 ,0 ,0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [1 ,0 ,0 ,0 ,0 ,0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [1 ,0 ,0 ,0 ,0 ,0 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0], 
+    [1 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0],
+    [1 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0],
+    [1 ,0 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0 ,0 ,0],
+    [1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,2 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1] 
 ]
 
 
@@ -130,7 +131,7 @@ Enemy_y_speed = 0
 # <---CONTROLS--->
 
 # [PLAYERS]
-Player_x= 0
+Player_x= 40
 Player_y= 268
 Player_x_speed = 0
 Player_y_speed = 0
@@ -215,6 +216,7 @@ crate_y = rt(0,536)
 shield_on = False
 
 # <---FUNCTIONS--->
+
 def draw(name,x,y):
     screen.blit(name,(x,y))
 
@@ -444,7 +446,7 @@ def options():
 
 def account(user_text):
     global mouse_click,running
-    user_text=''
+
     running1 = True
     font = pygame.font.Font(None,32)
     text_box = pygame.Rect(500,284,220,32)
@@ -457,11 +459,12 @@ def account(user_text):
             if ev.type == pygame.QUIT:
                 sys.exit()
             if ev.type == pygame.KEYDOWN:
+       
                 if ev.key == pygame.K_BACKSPACE:
                     user_text=user_text[0:-1]
                 else:
                     user_text += ev.unicode
-         
+      
             
             if ev.type == pygame.MOUSEBUTTONDOWN:
                 mouse_click = True
@@ -470,7 +473,7 @@ def account(user_text):
    
             if click():
                 running1 = False
-                running = False
+                
 
 
 
@@ -488,6 +491,7 @@ def show_menu():
     button_1 = pygame.Rect(400,275,200,50)
     button_2 = pygame.Rect(400,395,200,50)
     button_3 = pygame.Rect(400,335,200,50)
+    button_stats = pygame.Rect(890,55,100,100)
     button_account = pygame.Rect(0,500,100,100)
     while running1:
         draw(pygame.image.load('bg_1.png'),0,0)
@@ -495,6 +499,7 @@ def show_menu():
         draw(pygame.image.load('exit_button.png'),400,395)
         draw(pygame.image.load('Options.png'),400,335)
         draw(pygame.image.load('account.png'),0,500)
+        draw(pygame.image.load('stats.png'),890,55)
         mouse_x,mouse_y = pygame.mouse.get_pos()
         if button_1.collidepoint((mouse_x,mouse_y)):
             draw(pygame.image.load('start button-2.png'),400,275)
@@ -507,9 +512,7 @@ def show_menu():
         if button_2.collidepoint((mouse_x,mouse_y)):
             draw(pygame.image.load('exit.png'),400,395)
             if click():
-                running = False
-                running1 = False
-                mouse_click = False
+
                 sys.exit()
 
         if button_3.collidepoint((mouse_x,mouse_y)):
@@ -525,11 +528,14 @@ def show_menu():
        
         
                 account(user_text)
+        
+        if button_stats.collidepoint((mouse_x,mouse_y)):
+            draw(pygame.image.load('stats_2.png'),890,55)
 
 
         for ev in pygame.event.get():
             if ev.type == pygame.QUIT:
-                running = False
+   
                 running1 = False
 
                 sys.exit()
@@ -574,8 +580,7 @@ while running:
         if event.type == pygame.KEYDOWN:
 
             if event.key == pygame.K_ESCAPE:
-                with open('Game_Data.json','w') as game_data_file:
-                    json.dump(data,game_data_file)
+                
 
                 running = False
                 sys.exit()
@@ -682,8 +687,8 @@ while running:
         Player_y = 0
     if Player_x>=936:
         Player_x = 936
-    if Player_x <=0:
-        Player_x = 0
+    if Player_x <=30:
+        Player_x = 30
     
 
     if shield_activate:
