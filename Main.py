@@ -12,7 +12,7 @@ pygame.init()
 
 i = 0
 user_text=''
-# GAME DATA
+# GAME DATA.
 data = {
     "life": 150,
     "ammo": 10,
