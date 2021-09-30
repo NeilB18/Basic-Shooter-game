@@ -4,8 +4,8 @@ import sys
 from os import write
 from random import randint as rt
 import pygame
-from pygame import *
-from pygame.locals import *
+
+
 
 pygame.init()
 
@@ -249,10 +249,6 @@ def end_game():
 
     draw(game_over_screen,0,0)
 
-def show_time():
-       
-    timer_label = font.render(f"Time: {seconds}", True ,(0,0,0))
-    draw(timer_label,890,40)
 
 def show_lives():
     global damage_speed
@@ -691,13 +687,13 @@ while running:
         Player_x = 30
     
 
-    if shield_activate:
-        shield_activate_writing = font.render(f"Shield is activated", 0,(0,0,0)) 
-        draw(shield_activate_writing,40,40)
+    # if shield_activate:
+    #     shield_activate_writing = font.render(f"Shield is activated", 0,(0,0,0)) 
+    #     draw(shield_activate_writing,40,40)
         
     
-    if shield_collision(Shield_x, Shield_y, Player_x, Player_y,shield_activate):
-        shield_activate = True
+    # if shield_collision(Shield_x, Shield_y, Player_x, Player_y,shield_activate):
+    #     shield_activate = True
         
     
     if moving == True and seconds%7 ==0 :
@@ -740,4 +736,4 @@ while running:
         data["hunger"]=100
  
     pygame.display.update()
-    clock.tick(120)
+    clock.tick(60)
