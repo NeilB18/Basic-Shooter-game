@@ -5,10 +5,7 @@ from os import write
 from random import randint as rt
 import pygame
 
-
-
 pygame.init()
-
 
 i = 0
 user_text=''
@@ -615,7 +612,7 @@ while running:
                         
 
         if event.type == pygame.KEYUP:
-            if event.key == pygame.K_w or event.key == pygame.K_a or event.key == pygame.K_s or event.key == pygame.K_d:
+            if event.key == pygame.K_w or event.key == pygame.K_a or event.key == pygame.K_s or event.key == pygame.K_d or event.key == pygame.K_UP or event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT or event.key == pygame.K_DOWN:
                 Player_x_speed = 0
                 Player_y_speed = 0
                 moving = False
